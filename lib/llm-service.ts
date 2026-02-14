@@ -5,8 +5,8 @@ import { FractureType, LLMInsights, PatientInfo, Language } from '@/types';
  * แก้ไขปัญหา 404 และปรับปรุงการสกัด JSON
  */
 export class GeminiService {
-    // แนะนำ: ควรใช้รหัสที่สร้างใหม่ และเก็บใน .env.local จะปลอดภัยกว่าครับ
-    private static API_KEY = 'AIzaSyBT1ElGLnGuvpmKNS6ikgfOVPb6O25UjDM';
+    // ใช้ Environment Variable แทนการ Hardcode (เพื่อความปลอดภัยและอัปเดตง่าย)
+    private static API_KEY = process.env.NEXT_PUBLIC_GEMINI_API_KEY || '';
 
     // แก้ไข URL: ใช้ gemini-2.5-flash ซึ่งเป็นโมเดลเสถียรล่าสุดใน v1beta
     private static API_URL = `https://generativelanguage.googleapis.com/v1beta/models/gemini-2.5-flash:generateContent?key=`;
