@@ -57,6 +57,7 @@ export class AIAnalyzer {
         file: File,
         language: Language = 'en'
     ): Promise<AnalysisResult> {
+        // 1. Python Backend / Hugging Face API
         try {
             console.log("Sending image to Python backend for analysis...");
 
@@ -64,7 +65,10 @@ export class AIAnalyzer {
             formData.append('file', file);
             formData.append('language', language);
 
-            const response = await fetch('http://localhost:8000/analyze', {
+            console.log('Sending request to:', process.env.NEXT_PUBLIC_PYTHON_API_URL || 'http://localhost:8000');
+            const apiUrl = process.env.NEXT_PUBLIC_PYTHON_API_URL || 'http://localhost:8000';
+
+            const response = await fetch(`${apiUrl}/analyze`, {
                 method: 'POST',
                 body: formData
             });
@@ -96,12 +100,48 @@ export class AIAnalyzer {
             };
 
         } catch (e: any) {
-            console.warn("Backend API call failed, falling back to client-side model", e);
+            console.warn("Backend API call failed, trying Hugging Face...", e);
         }
 
-        // 2. Fallback to Client-Side TensorFlow.js Model
+        // 2. Fallback to Hugging Face Space (if configured)
+        const hfUrl = process.env.NEXT_PUBLIC_PYTHON_API_URL; // Re-use this or add a new env var
+        if (hfUrl && hfUrl.includes('hf.space')) {
+            try {
+                console.log("Using Hugging Face API...");
+
+                // Create new FormData for the new request
+                const hfFormData = new FormData();
+                hfFormData.append('file', file);
+                hfFormData.append('language', language);
+
+                const response = await fetch(`${hfUrl}/analyze`, {
+                    method: 'POST',
+                    body: hfFormData
+                });
+
+                if (response.ok) {
+                    const data = await response.json();
+                    return {
+                        fractureType: data.fractureType as FractureType,
+                        confidence: data.confidence,
+                        status: 'ai_confirmed',
+                        label: this.getLocalizedLabel(data.fractureType, language),
+                        description: this.getDescription(data.fractureType, data.confidence, language),
+                        metadata: {
+                            ...data.metadata,
+                            inference: 'huggingface',
+                            provider: 'Hugging Face Space'
+                        }
+                    } as AnalysisResult;
+                }
+            } catch (hfError) {
+                console.warn("Hugging Face API failed, falling back to client-side model", hfError);
+            }
+        }
+
+        // 3. Fallback to Client-Side TensorFlow.js / ONNX Model
         try {
-            console.log("Using client-side TensorFlow.js model (Fallback)");
+            console.log("Using client-side ONNX model (Fallback)");
 
             // Use ClientModel instead of simulation
             const modelResult = await ClientModel.predict(file);

@@ -16,27 +16,40 @@ import { useEffect, useRef } from 'react';
 import { X } from 'lucide-react';
 
 function BackendStatusIndicator() {
-  const [isOnline, setIsOnline] = useState<boolean | null>(null);
+  const [status, setStatus] = useState<'online' | 'offline' | 'checking'>('checking');
+  const [provider, setProvider] = useState<string>('Local Backend');
 
   useEffect(() => {
+    const apiUrl = process.env.NEXT_PUBLIC_PYTHON_API_URL || 'http://localhost:8000';
+    const isHf = apiUrl.includes('hf.space');
+    setProvider(isHf ? 'Hugging Face' : 'Local Backend');
+
     const checkStatus = async () => {
       try {
-        const res = await fetch('http://localhost:8000/', { method: 'GET' });
-        setIsOnline(res.ok);
+        // For HF, we check /health or root
+        const res = await fetch(`${apiUrl}/health`, { method: 'GET' });
+        setStatus(res.ok ? 'online' : 'offline');
       } catch (e) {
-        setIsOnline(false);
+        // Fallback check for root if /health fails (for older backend versions)
+        try {
+          const resRoot = await fetch(apiUrl, { method: 'GET' });
+          setStatus(resRoot.ok ? 'online' : 'offline');
+        } catch (e2) {
+          setStatus('offline');
+        }
       }
     };
+
     checkStatus();
-    const interval = setInterval(checkStatus, 5000);
+    const interval = setInterval(checkStatus, 10000); // Check every 10s
     return () => clearInterval(interval);
   }, []);
 
   return (
     <div className="flex items-center gap-2 bg-slate-800/50 px-3 py-1 rounded-full border border-slate-700">
-      <div className={`w-2 h-2 rounded-full ${isOnline === true ? 'bg-emerald-400 animate-pulse' : isOnline === false ? 'bg-red-400' : 'bg-slate-500 animate-pulse'}`}></div>
+      <div className={`w-2 h-2 rounded-full ${status === 'online' ? 'bg-emerald-400 animate-pulse' : status === 'offline' ? 'bg-red-400' : 'bg-slate-500 animate-pulse'}`}></div>
       <span className="text-slate-300">
-        Python Backend: {isOnline === true ? <span className="text-emerald-400">Online</span> : isOnline === false ? <span className="text-red-400">Offline</span> : 'Checking...'}
+        {provider}: {status === 'online' ? <span className="text-emerald-400">Online</span> : status === 'offline' ? <span className="text-red-400">Offline</span> : 'Checking...'}
       </span>
     </div>
   );

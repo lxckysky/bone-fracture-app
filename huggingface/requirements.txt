@@ -1,0 +1,8 @@
+fastapi==0.104.1
+uvicorn[standard]==0.24.0
+python-multipart==0.0.6
+ultralytics>=8.3.0
+numpy<2.0.0
+# Let ultralytics handle torch versions or specify compatible ones if needed
+# torch>=2.0.0
+# torchvision>=0.15.0
