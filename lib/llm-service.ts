@@ -61,7 +61,12 @@ export class GeminiService {
 
 Fracture: ${type}
 Confidence: ${Math.round(confidence * 100)}%
-Patient: Age ${patient?.age || 'N/A'}, Gender ${patient?.gender || 'N/A'}, Injury: ${patient?.mechanismOfInjury || 'Unknown'}
+Patient Info:
+- Age: ${patient?.age || 'N/A'}
+- Gender: ${patient?.gender || 'N/A'}
+- Injury Mechanism: ${patient?.mechanismOfInjury || 'Unknown'}
+- Pain Level: ${patient?.painLevel || 'N/A'}/10
+- Medical History: ${patient?.medicalHistory || 'None'}
 
 CRITICAL RULES:
 1. Response MUST be ONLY valid JSON - no markdown, no code blocks, no explanation

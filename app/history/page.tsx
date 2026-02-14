@@ -31,8 +31,9 @@ export default function HistoryPage() {
         const fetchCases = async () => {
             if (user) {
                 setLoading(true);
-                const userCases = await API.getCases(user.id);
-                setCases(userCases);
+                // Fetch ALL cases for shared history (removed user.id constraint)
+                const allCases = await API.getCases();
+                setCases(allCases);
                 setLoading(false);
             }
         };
@@ -42,20 +43,20 @@ export default function HistoryPage() {
 
     const filteredCases = cases.filter((c) => {
         if (filter === 'all') return true;
-        if (filter === 'confirmed') return c.status === 'ai_confirmed';
-        if (filter === 'pending') return c.status === 'pending_review';
+        // Merge ai_confirmed and pending_review into 'pending'
+        if (filter === 'pending') return c.status === 'pending_review' || c.status === 'ai_confirmed';
         if (filter === 'reviewed') return c.status === 'doctor_confirmed';
         return true;
     });
 
     const getStatusBadge = (status: string) => {
         const badges = {
-            ai_confirmed: 'bg-emerald-500/20 text-emerald-400 border-emerald-500/30',
+            ai_confirmed: 'bg-amber-500/20 text-amber-400 border-amber-500/30', // Same as pending
             pending_review: 'bg-amber-500/20 text-amber-400 border-amber-500/30',
             doctor_confirmed: 'bg-cyan-500/20 text-cyan-400 border-cyan-500/30',
         };
         const labels = {
-            ai_confirmed: 'AI Confirmed',
+            ai_confirmed: 'Pending Review', // Rename AI Confirmed to Pending Review to reduce redundancy
             pending_review: 'Pending Review',
             doctor_confirmed: 'Doctor Verified',
         };
@@ -83,14 +84,14 @@ export default function HistoryPage() {
                 <div>
                     <h1 className="text-4xl font-bold flex items-center gap-3">
                         <HistoryIcon className="text-cyan-400" size={40} />
-                        Analysis History
+                        Case History (Shared)
                     </h1>
-                    <p className="text-slate-400 mt-2">View and manage your past X-ray analysis results</p>
+                    <p className="text-slate-400 mt-2">View all past analysis results</p>
                 </div>
             </div>
 
             {/* Statistics */}
-            <div className="grid grid-cols-1 md:grid-cols-4 gap-4">
+            <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
                 <Card>
                     <CardBody className="text-center">
                         <p className="text-slate-400 text-sm">Total Scans</p>
@@ -99,17 +100,9 @@ export default function HistoryPage() {
                 </Card>
                 <Card>
                     <CardBody className="text-center">
-                        <p className="text-slate-400 text-sm">AI Confirmed</p>
-                        <p className="text-3xl font-bold text-emerald-400">
-                            {cases.filter((c) => c.status === 'ai_confirmed').length}
-                        </p>
-                    </CardBody>
-                </Card>
-                <Card>
-                    <CardBody className="text-center">
                         <p className="text-slate-400 text-sm">Pending Review</p>
                         <p className="text-3xl font-bold text-amber-400">
-                            {cases.filter((c) => c.status === 'pending_review').length}
+                            {cases.filter((c) => c.status === 'pending_review' || c.status === 'ai_confirmed').length}
                         </p>
                     </CardBody>
                 </Card>
@@ -129,7 +122,7 @@ export default function HistoryPage() {
                     <Filter className="text-cyan-400" size={20} />
                     <span className="font-semibold text-slate-300">Filter:</span>
                     <div className="flex gap-2">
-                        {['all', 'confirmed', 'pending', 'reviewed'].map((f) => (
+                        {['all', 'pending', 'reviewed'].map((f) => (
                             <button
                                 key={f}
                                 onClick={() => setFilter(f as any)}
@@ -138,7 +131,7 @@ export default function HistoryPage() {
                                     : 'bg-slate-700 text-slate-300 hover:bg-slate-600'
                                     }`}
                             >
-                                {f}
+                                {f === 'reviewed' ? 'Verified' : f}
                             </button>
                         ))}
                     </div>
