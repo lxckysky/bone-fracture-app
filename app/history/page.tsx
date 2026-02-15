@@ -11,35 +11,51 @@ import { AnalysisCase } from '@/types';
 import { getFractureLabel } from '@/lib/fracture-data';
 import { Modal } from '@/components/ui/modal';
 import { ImageViewer } from '@/components/image-viewer';
+import { getGuestId, isGuestId, getDisplayName } from '@/lib/guest-storage';
 
 export default function HistoryPage() {
     const router = useRouter();
-    const { user, isAuthenticated, isLoading: authLoading } = useAuth();
+    const { user, isAuthenticated, isLoading: authLoading, isDoctor, isAdmin } = useAuth();
     const [cases, setCases] = useState<AnalysisCase[]>([]);
     const [loading, setLoading] = useState(true);
     const [filter, setFilter] = useState<'all' | 'confirmed' | 'pending' | 'reviewed'>('all');
     const [selectedCase, setSelectedCase] = useState<AnalysisCase | null>(null);
+    const [userProfiles, setUserProfiles] = useState<Record<string, string>>({});
 
     useEffect(() => {
         if (authLoading) return;
 
-        if (!isAuthenticated) {
-            router.push('/login');
-            return;
-        }
-
         const fetchCases = async () => {
-            if (user) {
-                setLoading(true);
-                // Fetch ALL cases for shared history (removed user.id constraint)
-                const allCases = await API.getCases();
-                setCases(allCases);
-                setLoading(false);
+            setLoading(true);
+
+            // Determine which cases to fetch based on role
+            let allCases: AnalysisCase[] = [];
+
+            if (isDoctor || isAdmin) {
+                // Doctors and admins see ALL cases
+                allCases = await API.getCases();
+
+                // Fetch user profiles for display
+                const users = await API.getUsers();
+                const profileMap: Record<string, string> = {};
+                users.forEach(u => {
+                    profileMap[u.id] = u.name || u.email;
+                });
+                setUserProfiles(profileMap);
+            } else {
+                // Regular users and guests see only their own cases
+                const currentUserId = user?.id || getGuestId();
+                if (currentUserId) {
+                    allCases = await API.getCases(currentUserId);
+                }
             }
+
+            setCases(allCases);
+            setLoading(false);
         };
 
         fetchCases();
-    }, [isAuthenticated, user, router, authLoading]);
+    }, [isAuthenticated, user, router, authLoading, isDoctor, isAdmin]);
 
     const filteredCases = cases.filter((c) => {
         if (filter === 'all') return true;
@@ -75,8 +91,6 @@ export default function HistoryPage() {
         );
     }
 
-    if (!isAuthenticated) return null;
-
     return (
         <div className="max-w-7xl mx-auto space-y-6 animate-fade-in">
             {/* Header */}
@@ -84,9 +98,11 @@ export default function HistoryPage() {
                 <div>
                     <h1 className="text-4xl font-bold flex items-center gap-3">
                         <HistoryIcon className="text-cyan-400" size={40} />
-                        Case History (Shared)
+                        Case History
                     </h1>
-                    <p className="text-slate-400 mt-2">View all past analysis results</p>
+                    <p className="text-slate-400 mt-2">
+                        {isDoctor || isAdmin ? 'View all analysis cases from all users' : 'View your past analysis results'}
+                    </p>
                 </div>
             </div>
 
@@ -163,6 +179,15 @@ export default function HistoryPage() {
                                     <h3 className="font-bold text-lg text-cyan-400">
                                         {getFractureLabel(case_.fractureType, case_.language)}
                                     </h3>
+                                    {(isDoctor || isAdmin) && (
+                                        <p className="text-xs text-slate-400 mt-1 flex items-center gap-1">
+                                            <svg xmlns="http://www.w3.org/2000/svg" width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+                                                <path d="M19 21v-2a4 4 0 0 0-4-4H9a4 4 0 0 0-4 4v2" />
+                                                <circle cx="12" cy="7" r="4" />
+                                            </svg>
+                                            {getDisplayName(case_.userId, userProfiles[case_.userId])}
+                                        </p>
+                                    )}
                                     <div className="flex items-center gap-2 mt-2">
                                         <Calendar size={16} className="text-slate-400" />
                                         <span className="text-sm text-slate-400">

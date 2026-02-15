@@ -222,7 +222,6 @@ export default function AdminPage() {
                                     <th className="text-left py-3 px-4 text-slate-400 font-semibold">Email</th>
                                     <th className="text-left py-3 px-4 text-slate-400 font-semibold">Current Role</th>
                                     <th className="text-left py-3 px-4 text-slate-400 font-semibold">Change Role</th>
-                                    <th className="text-left py-3 px-4 text-slate-400 font-semibold">Actions</th>
                                 </tr>
                             </thead>
                             <tbody>
@@ -258,16 +257,6 @@ export default function AdminPage() {
                                                 <option value="doctor">Doctor</option>
                                                 <option value="admin">Admin</option>
                                             </select>
-                                        </td>
-                                        <td className="py-3 px-4">
-                                            <Button
-                                                variant="danger"
-                                                size="sm"
-                                                onClick={() => handleDeleteUser(user.id)}
-                                                disabled={user.id === currentUser?.id}
-                                            >
-                                                Delete
-                                            </Button>
                                         </td>
                                     </tr>
                                 ))}

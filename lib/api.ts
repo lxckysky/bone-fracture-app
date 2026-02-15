@@ -158,12 +158,20 @@ export class API {
                 if (url) imageUrl = url;
             }
 
-            // Ensure we have a user ID
+            // Get user ID (authenticated user or guest)
             const { data: { user } } = await supabase.auth.getUser();
-            if (!user) throw new Error("Not authenticated");
+            let userId = user?.id;
+
+            // If not authenticated, use guest ID from localStorage
+            if (!userId && typeof window !== 'undefined') {
+                const { getGuestId } = await import('./guest-storage');
+                userId = getGuestId();
+            }
+
+            if (!userId) throw new Error("No user ID available");
 
             const dbData = {
-                user_id: user.id,
+                user_id: userId,
                 image_url: imageUrl,
                 image_path: '', // Optional, stored in URL
                 fracture_type: caseData.fractureType || 'normal',

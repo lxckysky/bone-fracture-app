@@ -355,7 +355,7 @@ export default function HomePage() {
 
           {/* 2. Upload Area */}
           <div
-            className={`border-2 border-dashed rounded-xl p-8 text-center transition-all cursor-pointer h-[320px] flex flex-col items-center justify-center relative overflow-hidden group ${dragActive
+            className={`border-2 border-dashed rounded-xl p-8 text-center transition-all cursor-pointer h-[420px] flex flex-col items-center justify-center relative overflow-hidden group ${dragActive
               ? 'drag-active border-cyan-500 bg-cyan-500/10'
               : 'border-slate-600 hover:border-cyan-500/50 hover:bg-slate-800/50'
               }`}
@@ -373,8 +373,13 @@ export default function HomePage() {
           >
             {!imagePreview ? (
               <div className="relative z-10">
-                <div className="w-20 h-20 bg-slate-800 rounded-full flex items-center justify-center mx-auto mb-6 border border-slate-700 group-hover:scale-110 transition-transform duration-300">
-                  <Upload className="text-cyan-400" size={36} />
+                {/* Modern Image Upload Icon */}
+                <div className="w-24 h-24 bg-gradient-to-br from-cyan-500 to-blue-600 rounded-2xl flex items-center justify-center mx-auto mb-6 shadow-lg shadow-cyan-500/25 group-hover:scale-110 group-hover:shadow-cyan-500/40 transition-all duration-300">
+                  <svg xmlns="http://www.w3.org/2000/svg" width="48" height="48" viewBox="0 0 24 24" fill="none" stroke="white" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+                    <rect x="3" y="3" width="18" height="18" rx="2" ry="2" />
+                    <circle cx="8.5" cy="8.5" r="1.5" />
+                    <polyline points="21 15 16 10 5 21" />
+                  </svg>
                 </div>
                 <h3 className="text-2xl font-bold mb-2">
                   {t.upload_section}
@@ -386,7 +391,7 @@ export default function HomePage() {
               </div>
             ) : (
               <div className="relative z-10 w-full h-full flex items-center justify-center group/img">
-                <img src={imagePreview} alt="Preview" className="max-h-[250px] w-auto rounded-lg shadow-xl transition-transform group-hover/img:scale-[1.02]" />
+                <img src={imagePreview} alt="Preview" className="max-h-[340px] w-auto rounded-lg shadow-xl transition-transform group-hover/img:scale-[1.02]" />
                 <div className="absolute inset-0 bg-black/40 opacity-0 group-hover/img:opacity-100 transition-opacity flex items-center justify-center text-white text-xs font-bold gap-2">
                   คลิกเพื่อขยายดูรูปใหญ่
                 </div>
