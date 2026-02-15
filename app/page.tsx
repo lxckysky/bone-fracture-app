@@ -177,8 +177,8 @@ export default function HomePage() {
 
       setLlmInsights(insights);
 
-      // Step 3: Auto-save for logged-in users
-      if (isAuthenticated && user && fileType === 'image') {
+      // Step 3: Auto-save for all users (authenticated and guests)
+      if (fileType === 'image') {
         const savedCase = await API.createCase({
           file: currentFile,
           fractureType: analysisResult.fractureType,
