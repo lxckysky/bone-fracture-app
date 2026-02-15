@@ -12,7 +12,7 @@ import { ImageViewer } from '@/components/image-viewer';
 import { ConfidenceBar } from '@/components/confidence-bar';
 import { API } from '@/lib/api';
 import { AnalysisCase, FractureType } from '@/types';
-import { getFractureLabel, fractureTypes } from '@/lib/fracture-data';
+import { getFractureLabel, doctorOverrideTypes } from '@/lib/fracture-data';
 
 export default function DoctorPage() {
     const router = useRouter();
@@ -30,6 +30,8 @@ export default function DoctorPage() {
     const [deleteConfirmOpen, setDeleteConfirmOpen] = useState(false);
     const [caseToDelete, setCaseToDelete] = useState<string | null>(null);
     const [selectedCases, setSelectedCases] = useState<Set<string>>(new Set());
+    const [brightness, setBrightness] = useState(100);
+    const [contrast, setContrast] = useState(100);
 
     useEffect(() => {
         if (authLoading) return;
@@ -295,7 +297,7 @@ export default function DoctorPage() {
                                                 </td>
                                                 <td className="py-3 px-4">
                                                     <p className="font-semibold text-white">
-                                                        {getFractureLabel(case_.aiDiagnosis, case_.language)}
+                                                        {getFractureLabel(case_.aiDiagnosis, 'en')}
                                                     </p>
                                                 </td>
                                                 <td className="py-3 px-4">
@@ -409,7 +411,7 @@ export default function DoctorPage() {
                                             <div>
                                                 <span className="text-xs font-bold text-cyan-400 uppercase tracking-wider">Vision AI Diagnosis</span>
                                                 <h2 className="text-2xl font-bold text-white capitalize">
-                                                    {getFractureLabel(selectedCase.aiDiagnosis, selectedCase.language)}
+                                                    {getFractureLabel(selectedCase.aiDiagnosis, 'en')}
                                                 </h2>
                                             </div>
                                             <div className="text-right">
@@ -487,9 +489,9 @@ export default function DoctorPage() {
                                                     onChange={(e) => setDiagnosisType(e.target.value as FractureType)}
                                                     className="w-full bg-slate-900 border border-slate-700 rounded-lg p-3 text-white focus:border-amber-500 outline-none"
                                                 >
-                                                    {fractureTypes.map((type) => (
+                                                    {doctorOverrideTypes.map((type) => (
                                                         <option key={type} value={type}>
-                                                            {getFractureLabel(type, selectedCase.language)}
+                                                            {getFractureLabel(type, 'en')}
                                                         </option>
                                                     ))}
                                                 </select>
@@ -531,22 +533,92 @@ export default function DoctorPage() {
                 isLightboxOpen && lightboxImage && (
                     <div
                         className="fixed inset-0 z-[200] bg-black/90 backdrop-blur-sm flex items-center justify-center p-4 md:p-10 animate-fade-in"
-                        onClick={() => setIsLightboxOpen(false)}
+                        onClick={() => {
+                            setIsLightboxOpen(false);
+                            setBrightness(100);
+                            setContrast(100);
+                        }}
                     >
                         <button
                             className="absolute top-6 right-6 text-white/50 hover:text-white transition-colors p-2 bg-white/10 rounded-full z-[210]"
-                            onClick={(e) => { e.stopPropagation(); setIsLightboxOpen(false); }}
+                            onClick={(e) => {
+                                e.stopPropagation();
+                                setIsLightboxOpen(false);
+                                setBrightness(100);
+                                setContrast(100);
+                            }}
                         >
                             <X size={32} />
                         </button>
+
+                        {/* Image Controls Panel */}
+                        <div className="absolute top-6 left-6 bg-black/80 backdrop-blur-md rounded-xl p-4 z-[210] space-y-4 border border-white/10" onClick={(e) => e.stopPropagation()}>
+                            <h3 className="text-white font-bold text-sm mb-3 flex items-center gap-2">
+                                <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+                                    <circle cx="12" cy="12" r="3"></circle>
+                                    <path d="M12 1v6m0 6v6"></path>
+                                    <path d="m4.2 4.2 4.2 4.2m5.6 5.6 4.2 4.2"></path>
+                                    <path d="M1 12h6m6 0h6"></path>
+                                    <path d="m4.2 19.8 4.2-4.2m5.6-5.6 4.2-4.2"></path>
+                                </svg>
+                                Image Adjustments
+                            </h3>
+
+                            {/* Brightness Control */}
+                            <div className="space-y-2">
+                                <div className="flex items-center justify-between">
+                                    <label className="text-white/70 text-xs font-medium">Brightness</label>
+                                    <span className="text-cyan-400 text-xs font-bold">{brightness}%</span>
+                                </div>
+                                <input
+                                    type="range"
+                                    min="0"
+                                    max="200"
+                                    value={brightness}
+                                    onChange={(e) => setBrightness(parseInt(e.target.value))}
+                                    className="w-full h-2 bg-slate-700 rounded-lg appearance-none cursor-pointer slider-thumb"
+                                />
+                            </div>
+
+                            {/* Contrast Control */}
+                            <div className="space-y-2">
+                                <div className="flex items-center justify-between">
+                                    <label className="text-white/70 text-xs font-medium">Contrast</label>
+                                    <span className="text-cyan-400 text-xs font-bold">{contrast}%</span>
+                                </div>
+                                <input
+                                    type="range"
+                                    min="0"
+                                    max="200"
+                                    value={contrast}
+                                    onChange={(e) => setContrast(parseInt(e.target.value))}
+                                    className="w-full h-2 bg-slate-700 rounded-lg appearance-none cursor-pointer slider-thumb"
+                                />
+                            </div>
+
+                            {/* Reset Button */}
+                            <button
+                                onClick={() => {
+                                    setBrightness(100);
+                                    setContrast(100);
+                                }}
+                                className="w-full bg-slate-700 hover:bg-slate-600 text-white text-xs font-semibold py-2 px-3 rounded-lg transition-colors"
+                            >
+                                Reset
+                            </button>
+                        </div>
+
                         <img
                             src={lightboxImage}
                             alt="Enlarged"
                             className="max-w-full max-h-full object-contain shadow-2xl animate-scale-up"
+                            style={{
+                                filter: `brightness(${brightness}%) contrast(${contrast}%)`
+                            }}
                             onClick={(e) => e.stopPropagation()}
                         />
                         <div className="absolute bottom-6 left-1/2 -translate-x-1/2 bg-black/60 px-4 py-2 rounded-full text-white/70 text-sm backdrop-blur-md">
-                            {selectedCase ? `Reviewing Case: ${getFractureLabel(selectedCase.aiDiagnosis, selectedCase.language)}` : 'X-Ray Detailed View'}
+                            {selectedCase ? `Reviewing Case: ${getFractureLabel(selectedCase.aiDiagnosis, 'en')}` : 'X-Ray Detailed View'}
                         </div>
                     </div>
                 )

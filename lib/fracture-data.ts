@@ -164,10 +164,38 @@ export const fractureLabels: FractureLabels = {
         th: 'กรณีฝึกสอน',
         zh: '训练用例',
         ja: 'トレーニングケース',
+    },
+    "Other": {
+        en: 'Other (Please specify in notes)',
+        th: 'อื่นๆ (โปรดระบุในหมายเหตุ)',
+        zh: '其他（请在备注中说明）',
+        ja: 'その他（備考に記載してください）',
     }
 };
 
-// Get all fracture types
+// The 12 model prediction types (what the AI model outputs)
+export const modelPredictionTypes: FractureType[] = [
+    "Avulsion fracture",
+    "Comminuted fracture",
+    "Compression-Crush fracture",
+    "Fracture Dislocation",
+    "Greenstick fracture",
+    "Hairline Fracture",
+    "Impacted fracture",
+    "Intra-articular fracture",
+    "Longitudinal fracture",
+    "Oblique fracture",
+    "Pathological fracture",
+    "Spiral Fracture"
+];
+
+// Doctor override options: 12 model types + Other
+export const doctorOverrideTypes: FractureType[] = [
+    ...modelPredictionTypes,
+    "Other"
+];
+
+// Get all fracture types (for compatibility)
 export const fractureTypes: FractureType[] = Object.keys(fractureLabels) as FractureType[];
 
 // Helper function to get label in specific language

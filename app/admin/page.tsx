@@ -8,6 +8,7 @@ import { Card, CardBody, CardHeader } from '@/components/ui/card';
 import { Button } from '@/components/ui/button';
 import { ConfirmDialog } from '@/components/ui/confirm-dialog';
 import { API } from '@/lib/api';
+import { getFractureLabel } from '@/lib/fracture-data';
 import { User, UserRole, AnalysisCase } from '@/types';
 
 export default function AdminPage() {
@@ -348,7 +349,7 @@ export default function AdminPage() {
                                                 </td>
                                                 <td className="py-3 px-4">
                                                     <p className="font-semibold text-white capitalize">
-                                                        {case_.aiDiagnosis || case_.fractureType}
+                                                        {getFractureLabel(case_.aiDiagnosis || case_.fractureType, 'en')}
                                                     </p>
                                                 </td>
                                                 <td className="py-3 px-4">

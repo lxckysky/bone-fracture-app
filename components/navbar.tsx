@@ -23,7 +23,7 @@ export function Navbar() {
                             <Activity className="text-white" size={28} />
                         </div>
                         <div>
-                            <h1 className="text-xl font-bold text-white">MediFracture AI</h1>
+                            <h1 className="text-xl font-bold text-white">Bone Fracture Analysis Website</h1>
                             <p className="text-xs text-slate-400">Professional Analysis System</p>
                         </div>
                     </Link>

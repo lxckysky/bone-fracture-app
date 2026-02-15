@@ -11,6 +11,8 @@ import { GeminiService } from '@/lib/llm-service';
 import { ClientModel } from '@/lib/client-model';
 import { API } from '@/lib/api';
 import { LanguageCode, LANGUAGES, ALIAS_MAPPING, EXPLANATIONS, FRACTURE_LABELS } from '@/lib/i18n';
+import { getFractureLabel } from '@/lib/fracture-data';
+import { BONE_FRACTURE_INFO, SYSTEM_INFO } from '@/lib/education-data';
 import { AnalysisResult, PatientInfo, LLMInsights, FractureType } from '@/types';
 import { useEffect, useRef } from 'react';
 import { X } from 'lucide-react';
@@ -430,7 +432,7 @@ export default function HomePage() {
                 onClick={(e) => e.stopPropagation()}
               />
               <div className="absolute bottom-6 left-1/2 -translate-x-1/2 bg-black/60 px-4 py-2 rounded-full text-white/70 text-sm backdrop-blur-md">
-                {result?.label || 'ภาพระบุตำแหน่งกระดูก'}
+                {result ? getFractureLabel(result.fractureType, language) : 'ภาพระบุตำแหน่งกระดูก'}
               </div>
             </div>
           )}
@@ -511,7 +513,7 @@ export default function HomePage() {
                         )}
                       </div>
                       <h2 className="text-3xl font-bold text-white tracking-tight">
-                        {result.label}
+                        {getFractureLabel(result.fractureType, language)}
                       </h2>
                       {result.metadata?.top3 && (
                         <div className="text-[10px] text-slate-500 mt-1">
@@ -601,6 +603,112 @@ export default function HomePage() {
               )}
             </div>
           )}
+        </div>
+      </div>
+
+      {/* Educational Content Section */}
+      <div className="max-w-7xl mx-auto mt-16 space-y-12 pb-12">
+        {/* Fracture Types Information */}
+        <div className="space-y-6">
+          <div className="text-center">
+            <h2 className="text-3xl font-bold bg-gradient-to-r from-cyan-400 to-blue-500 bg-clip-text text-transparent mb-2">
+              {language === 'th' ? 'ประเภทการหักของกระดูกที่ระบบสามารถวิเคราะห์ได้' :
+                language === 'zh' ? '系统可分析的骨折类型' :
+                  language === 'ja' ? 'システムが分析可能な骨折タイプ' :
+                    'Bone Fracture Types'}
+            </h2>
+            <p className="text-slate-400">
+              {language === 'th' ? '12 รูปแบบการหักของกระดูกที่ AI สามารถตรวจจับและวิเคราะห์ได้' :
+                language === 'zh' ? 'AI可检测和分析的12种骨折模式' :
+                  language === 'ja' ? 'AIが検出・分析できる12種類の骨折パターン' :
+                    '12 fracture patterns AI can detect and analyze'}
+            </p>
+          </div>
+
+          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
+            {BONE_FRACTURE_INFO[language].map(([title, description], index) => (
+              <div
+                key={index}
+                className="group bg-gradient-to-br from-slate-800/50 to-slate-900/50 backdrop-blur-sm border border-slate-700/50 rounded-xl p-5 hover:border-cyan-500/50 transition-all duration-300 hover:transform hover:scale-105 hover:shadow-lg hover:shadow-cyan-500/10"
+              >
+                <div className="flex items-start gap-3">
+                  <div className="flex-shrink-0 w-8 h-8 bg-gradient-to-br from-cyan-500 to-blue-600 rounded-lg flex items-center justify-center text-white font-bold text-sm group-hover:scale-110 transition-transform">
+                    {index + 1}
+                  </div>
+                  <div className="flex-1">
+                    <h3 className="font-bold text-white mb-1 group-hover:text-cyan-400 transition-colors">
+                      {title}
+                    </h3>
+                    <p className="text-sm text-slate-400 leading-relaxed">
+                      {description}
+                    </p>
+                  </div>
+                </div>
+              </div>
+            ))}
+          </div>
+        </div>
+
+        {/* System Information */}
+        <div className="space-y-6">
+          <div className="text-center">
+            <h2 className="text-3xl font-bold bg-gradient-to-r from-purple-400 to-pink-500 bg-clip-text text-transparent mb-2">
+              {language === 'th' ? 'ข้อมูลระบบ' :
+                language === 'zh' ? '系统信息' :
+                  language === 'ja' ? 'システム情報' :
+                    'System Information'}
+            </h2>
+            <p className="text-slate-400">
+              {language === 'th' ? 'เทคโนโลยีและความสามารถของระบบวิเคราะห์กระดูกหัก' :
+                language === 'zh' ? '骨折分析系统的技术和能力' :
+                  language === 'ja' ? '骨折分析システムの技術と機能' :
+                    'Technology and capabilities of fracture analysis system'}
+            </p>
+          </div>
+
+          <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+            {SYSTEM_INFO[language].map(([title, description], index) => (
+              <div
+                key={index}
+                className="bg-gradient-to-br from-purple-900/20 to-pink-900/20 backdrop-blur-sm border border-purple-500/30 rounded-xl p-6 hover:border-purple-400/50 transition-all duration-300 hover:shadow-lg hover:shadow-purple-500/10"
+              >
+                <div className="flex items-start gap-4">
+                  <div className="flex-shrink-0">
+                    <div className="w-12 h-12 bg-gradient-to-br from-purple-500 to-pink-600 rounded-xl flex items-center justify-center">
+                      {index === 0 && (
+                        <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" className="text-white">
+                          <path d="M12 2a2 2 0 0 1 2 2c0 .74-.4 1.39-1 1.73V7h1a7 7 0 0 1 7 7h1a1 1 0 0 1 1 1v2a1 1 0 0 1-1 1h-1a7 7 0 0 1-7 7v-1.73c.6-.34 1-.99 1-1.73a2 2 0 0 0-4 0c0 .74.4 1.39 1 1.73V22a7 7 0 0 1-7-7H2a1 1 0 0 1-1-1v-2a1 1 0 0 1 1-1h1a7 7 0 0 1 7-7h1V5.73c-.6-.34-1-.99-1-1.73a2 2 0 0 1 2-2Z" />
+                        </svg>
+                      )}
+                      {index === 1 && (
+                        <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" className="text-white">
+                          <path d="M9 11 12 14 22 4" /><path d="M21 12v7a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h11" />
+                        </svg>
+                      )}
+                      {index === 2 && (
+                        <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" className="text-white">
+                          <path d="M13 2 3 14h9l-1 8 10-12h-9l1-8z" />
+                        </svg>
+                      )}
+                      {index === 3 && (
+                        <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" className="text-white">
+                          <path d="M12 2a10 10 0 1 0 10 10 4 4 0 0 1-5-5 4 4 0 0 1-5-5" /><path d="M8.5 8.5v.01" /><path d="M16 15.5v.01" /><path d="M12 12v.01" /><path d="M11 17v.01" /><path d="M7 14v.01" />
+                        </svg>
+                      )}
+                    </div>
+                  </div>
+                  <div className="flex-1">
+                    <h3 className="font-bold text-lg text-white mb-2">
+                      {title}
+                    </h3>
+                    <p className="text-slate-300 leading-relaxed">
+                      {description}
+                    </p>
+                  </div>
+                </div>
+              </div>
+            ))}
+          </div>
         </div>
       </div>
     </div>

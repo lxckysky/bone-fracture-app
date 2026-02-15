@@ -40,7 +40,22 @@ export type FractureType =
     | 'calcaneus'
     | 'metatarsal'
     | 'vertebral'
-    | 'pelvic';
+    | 'pelvic'
+    | 'Avulsion fracture'
+    | 'Comminuted fracture'
+    | 'Compression-Crush fracture'
+    | 'Fracture Dislocation'
+    | 'Greenstick fracture'
+    | 'Hairline Fracture'
+    | 'Impacted fracture'
+    | 'Intra-articular fracture'
+    | 'Longitudinal fracture'
+    | 'Oblique fracture'
+    | 'Pathological fracture'
+    | 'Spiral Fracture'
+    | 'Test'
+    | 'Train'
+    | 'Other';
 
 // User interface
 export interface User {
