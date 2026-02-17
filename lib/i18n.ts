@@ -64,7 +64,7 @@ export const LANGUAGES: Record<LanguageCode, any> = {
         gender_male: 'ชาย',
         gender_female: 'หญิง',
         gender_other: 'อื่นๆ',
-        moi: 'กลไกการบาดเจ็บ',
+        moi: 'สาเหตุการบาดเจ็บ',
         moi_placeholder: 'เช่น อุบัติเหตุรถยนต์, หกล้ม',
         pain_level: 'ระดับความเจ็บปวด (1-10)',
         medical_history: 'ประวัติการรักษา / ปัจจัยเสี่ยง',
