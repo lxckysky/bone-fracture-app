@@ -12,7 +12,8 @@ import { ClientModel } from '@/lib/client-model';
 import { API } from '@/lib/api';
 import { LanguageCode, LANGUAGES, ALIAS_MAPPING, EXPLANATIONS, FRACTURE_LABELS } from '@/lib/i18n';
 import { getFractureLabel } from '@/lib/fracture-data';
-import { BONE_FRACTURE_INFO, SYSTEM_INFO } from '@/lib/education-data';
+import { BONE_FRACTURE_INFO, SYSTEM_INFO, FRACTURE_TYPE_KEYS } from '@/lib/education-data';
+import { FractureDetailModal } from '@/components/fracture-detail-modal';
 import { AnalysisResult, PatientInfo, LLMInsights, FractureType } from '@/types';
 import { useEffect, useRef } from 'react';
 import { X } from 'lucide-react';
@@ -64,6 +65,8 @@ export default function HomePage() {
   const [analyzing, setAnalyzing] = useState(false);
   const [result, setResult] = useState<AnalysisResult | null>(null);
   const [llmInsights, setLlmInsights] = useState<LLMInsights | null>(null);
+  const [selectedFracture, setSelectedFracture] = useState<string | null>(null);
+  const [showFractureModal, setShowFractureModal] = useState(false);
   const [imagePreview, setImagePreview] = useState<string | null>(null);
   const [currentFile, setCurrentFile] = useState<File | null>(null);
   const [dragActive, setDragActive] = useState(false);
@@ -634,7 +637,11 @@ export default function HomePage() {
             {BONE_FRACTURE_INFO[language].map(([title, description], index) => (
               <div
                 key={index}
-                className="group bg-gradient-to-br from-slate-800/50 to-slate-900/50 backdrop-blur-sm border border-slate-700/50 rounded-xl p-5 hover:border-cyan-500/50 transition-all duration-300 hover:transform hover:scale-105 hover:shadow-lg hover:shadow-cyan-500/10"
+                className="group bg-gradient-to-br from-slate-800/50 to-slate-900/50 backdrop-blur-sm border border-slate-700/50 rounded-xl p-5 hover:border-cyan-500/50 transition-all duration-300 hover:transform hover:scale-105 hover:shadow-lg hover:shadow-cyan-500/10 cursor-pointer"
+                onClick={() => {
+                  setSelectedFracture(FRACTURE_TYPE_KEYS[index]);
+                  setShowFractureModal(true);
+                }}
               >
                 <div className="flex items-start gap-3">
                   <div className="flex-shrink-0 w-8 h-8 bg-gradient-to-br from-cyan-500 to-blue-600 rounded-lg flex items-center justify-center text-white font-bold text-sm group-hover:scale-110 transition-transform">
@@ -647,6 +654,13 @@ export default function HomePage() {
                     <p className="text-sm text-slate-400 leading-relaxed">
                       {description}
                     </p>
+                    <button className="mt-3 text-xs text-cyan-400 hover:text-cyan-300 font-semibold flex items-center gap-1 opacity-0 group-hover:opacity-100 transition-opacity">
+                      {language === 'th' ? 'อ่านเพิ่มเติม' : language === 'zh' ? '阅读更多' : language === 'ja' ? '続きを読む' : 'Read More'}
+                      <svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+                        <path d="M5 12h14" />
+                        <path d="m12 5 7 7-7 7" />
+                      </svg>
+                    </button>
                   </div>
                 </div>
               </div>
@@ -716,6 +730,16 @@ export default function HomePage() {
           </div>
         </div>
       </div>
+
+      {/* Fracture Detail Modal */}
+      {selectedFracture && (
+        <FractureDetailModal
+          isOpen={showFractureModal}
+          onClose={() => setShowFractureModal(false)}
+          fractureKey={selectedFracture}
+          language={language}
+        />
+      )}
     </div>
   );
 }
