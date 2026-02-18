@@ -3,6 +3,7 @@
 import React, { useState, useCallback } from 'react';
 import { Upload, Globe2, AlertCircle, FileText, ImageIcon, User, Activity, Brain, Stethoscope, AlertTriangle } from 'lucide-react';
 import { useAuth } from '@/contexts/auth-context';
+import { useLanguage } from '@/contexts/language-context';
 import { Button } from '@/components/ui/button';
 import { Card, CardBody, CardHeader } from '@/components/ui/card';
 import { ConfidenceBar } from '@/components/confidence-bar';
@@ -60,7 +61,7 @@ function BackendStatusIndicator() {
 
 export default function HomePage() {
   const { user, isAuthenticated } = useAuth();
-  const [language, setLanguage] = useState<LanguageCode>('th');
+  const { language, setLanguage } = useLanguage();
   const [fileType, setFileType] = useState<'image' | 'dicom'>('image');
   const [analyzing, setAnalyzing] = useState(false);
   const [result, setResult] = useState<AnalysisResult | null>(null);

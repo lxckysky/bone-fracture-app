@@ -463,3 +463,544 @@ export const EXPLANATIONS: Record<LanguageCode, Record<string, string>> = {
         "Spiral Fracture": "🟠 らせん骨折 - 骨の周りのらせん状骨折パターン。スポーツ中や足が固定された状態での身体の捻転による強い捻転力が原因。腕と脚の骨に多い。注意：周囲の神経と血管を損傷する可能性"
     }
 };
+
+// ========== PAGE TRANSLATIONS ==========
+export const PAGE_TRANSLATIONS: Record<LanguageCode, {
+    // Navbar
+    nav_home: string;
+    nav_history: string;
+    nav_doctor: string;
+    nav_admin: string;
+    nav_login: string;
+    nav_logout: string;
+    nav_title: string;
+    nav_subtitle: string;
+    // Footer
+    footer_disclaimer_title: string;
+    footer_disclaimer_text: string;
+    footer_version: string;
+    // Login
+    login_welcome: string;
+    login_subtitle: string;
+    login_demo: string;
+    login_email: string;
+    login_password: string;
+    login_submit: string;
+    login_loading: string;
+    login_no_account: string;
+    login_signup_link: string;
+    // Signup
+    signup_title: string;
+    signup_subtitle: string;
+    signup_name: string;
+    signup_name_placeholder: string;
+    signup_email: string;
+    signup_password: string;
+    signup_confirm: string;
+    signup_submit: string;
+    signup_loading: string;
+    signup_has_account: string;
+    signup_login_link: string;
+    signup_password_mismatch: string;
+    signup_password_short: string;
+    signup_failed: string;
+    // History
+    history_title: string;
+    history_subtitle: string;
+    history_filter_all: string;
+    history_filter_confirmed: string;
+    history_filter_pending: string;
+    history_filter_reviewed: string;
+    history_loading: string;
+    history_empty: string;
+    history_empty_desc: string;
+    history_start_analysis: string;
+    history_date: string;
+    history_diagnosis: string;
+    history_details: string;
+    history_user: string;
+    history_language: string;
+    history_doctor_notes: string;
+    // Doctor
+    doctor_title: string;
+    doctor_subtitle: string;
+    doctor_pending: string;
+    doctor_reviewed: string;
+    doctor_table_patient: string;
+    doctor_table_diagnosis: string;
+    doctor_table_confidence: string;
+    doctor_table_date: string;
+    doctor_table_actions: string;
+    doctor_review: string;
+    doctor_delete: string;
+    doctor_ai_diagnosis: string;
+    doctor_your_diagnosis: string;
+    doctor_confirm_ai: string;
+    doctor_override: string;
+    doctor_notes: string;
+    doctor_notes_placeholder: string;
+    doctor_submit: string;
+    doctor_submitting: string;
+    doctor_no_pending: string;
+    doctor_no_pending_desc: string;
+    doctor_access_denied: string;
+    doctor_access_denied_desc: string;
+    // Admin
+    admin_title: string;
+    admin_subtitle: string;
+    admin_total_users: string;
+    admin_total_doctors: string;
+    admin_total_cases: string;
+    admin_pending_cases: string;
+    admin_confirmed: string;
+    admin_reviewed: string;
+    admin_user_management: string;
+    admin_case_management: string;
+    admin_name: string;
+    admin_email: string;
+    admin_role: string;
+    admin_actions: string;
+    admin_change_role: string;
+    admin_delete: string;
+    admin_access_denied: string;
+    admin_case_mgmt_desc: string;
+    admin_system_info: string;
+    // Confidence Bar
+    confidence_score: string;
+    confidence_confirmed: string;
+    confidence_pending: string;
+    // Common
+    loading: string;
+    close: string;
+    cancel: string;
+    confirm: string;
+    delete_confirm: string;
+    delete_confirm_msg: string;
+    guest: string;
+}> = {
+    th: {
+        // Navbar
+        nav_home: "หน้าหลัก",
+        nav_history: "ประวัติ",
+        nav_doctor: "แพทย์",
+        nav_admin: "ผู้ดูแล",
+        nav_login: "เข้าสู่ระบบ",
+        nav_logout: "ออกจากระบบ",
+        nav_title: "ระบบวิเคราะห์กระดูกหัก",
+        nav_subtitle: "ระบบวิเคราะห์เชิงวิชาชีพ",
+        // Footer
+        footer_disclaimer_title: "ข้อจำกัดความรับผิดชอบ",
+        footer_disclaimer_text: "ระบบนี้เป็นเครื่องมือช่วยในการวิเคราะห์เบื้องต้นเท่านั้น ไม่สามารถใช้แทนการวินิจฉัยของแพทย์ผู้เชี่ยวชาญได้ กรุณาปรึกษาแพทย์ออร์โธปิดิกส์เพื่อการตรวจสอบและรักษาที่เหมาะสม",
+        footer_version: "ระบบวิเคราะห์กระดูกหัก v3 รองรับ 4 ภาษา",
+        // Login
+        login_welcome: "ยินดีต้อนรับ",
+        login_subtitle: "เข้าสู่ระบบเพื่อเข้าถึงประวัติการวิเคราะห์",
+        login_demo: "บัญชีตัวอย่าง:",
+        login_email: "อีเมล",
+        login_password: "รหัสผ่าน",
+        login_submit: "เข้าสู่ระบบ",
+        login_loading: "กำลังเข้าสู่ระบบ...",
+        login_no_account: "ยังไม่มีบัญชี?",
+        login_signup_link: "สมัครสมาชิก",
+        // Signup
+        signup_title: "สร้างบัญชี",
+        signup_subtitle: "เข้าร่วมระบบวิเคราะห์กระดูกหัก",
+        signup_name: "ชื่อ-นามสกุล",
+        signup_name_placeholder: "สมชาย ใจดี",
+        signup_email: "อีเมล",
+        signup_password: "รหัสผ่าน",
+        signup_confirm: "ยืนยันรหัสผ่าน",
+        signup_submit: "สร้างบัญชี",
+        signup_loading: "กำลังสร้างบัญชี...",
+        signup_has_account: "มีบัญชีอยู่แล้ว?",
+        signup_login_link: "เข้าสู่ระบบ",
+        signup_password_mismatch: "รหัสผ่านไม่ตรงกัน",
+        signup_password_short: "รหัสผ่านต้องมีอย่างน้อย 6 ตัวอักษร",
+        signup_failed: "การลงทะเบียนล้มเหลว",
+        // History
+        history_title: "ประวัติการวิเคราะห์",
+        history_subtitle: "ดูประวัติการวิเคราะห์ X-ray ทั้งหมดของคุณ",
+        history_filter_all: "ทั้งหมด",
+        history_filter_confirmed: "ยืนยันแล้ว",
+        history_filter_pending: "รอตรวจสอบ",
+        history_filter_reviewed: "แพทย์ตรวจสอบ",
+        history_loading: "กำลังโหลด...",
+        history_empty: "ยังไม่มีประวัติ",
+        history_empty_desc: "เริ่มวิเคราะห์ภาพ X-ray เพื่อสร้างประวัติ",
+        history_start_analysis: "เริ่มวิเคราะห์",
+        history_date: "วันที่",
+        history_diagnosis: "ผลวินิจฉัย",
+        history_details: "รายละเอียด",
+        history_user: "ผู้ใช้",
+        history_language: "ภาษา",
+        history_doctor_notes: "หมายเหตุแพทย์",
+        // Doctor
+        doctor_title: "แผงควบคุมแพทย์",
+        doctor_subtitle: "ตรวจสอบและยืนยันผล AI ที่มีความมั่นใจต่ำ",
+        doctor_pending: "รอตรวจสอบ",
+        doctor_reviewed: "ตรวจสอบแล้ว",
+        doctor_table_patient: "ผู้ป่วย",
+        doctor_table_diagnosis: "ผลวินิจฉัย AI",
+        doctor_table_confidence: "ความมั่นใจ",
+        doctor_table_date: "วันที่",
+        doctor_table_actions: "การดำเนินการ",
+        doctor_review: "ตรวจสอบ",
+        doctor_delete: "ลบ",
+        doctor_ai_diagnosis: "ผลวินิจฉัย AI",
+        doctor_your_diagnosis: "การวินิจฉัยของคุณ",
+        doctor_confirm_ai: "ยืนยันผล AI",
+        doctor_override: "แก้ไขผลวินิจฉัย",
+        doctor_notes: "หมายเหตุแพทย์",
+        doctor_notes_placeholder: "เพิ่มหมายเหตุทางคลินิก...",
+        doctor_submit: "ส่งการตรวจสอบ",
+        doctor_submitting: "กำลังส่ง...",
+        doctor_no_pending: "ไม่มีเคสรอตรวจ",
+        doctor_no_pending_desc: "ทุกเคสได้รับการตรวจสอบแล้ว",
+        doctor_access_denied: "ไม่มีสิทธิ์เข้าถึง",
+        doctor_access_denied_desc: "หน้านี้สำหรับแพทย์เท่านั้น",
+        // Admin
+        admin_title: "แผงควบคุมผู้ดูแล",
+        admin_subtitle: "จัดการผู้ใช้และข้อมูลระบบ",
+        admin_total_users: "ผู้ใช้ทั้งหมด",
+        admin_total_doctors: "แพทย์ทั้งหมด",
+        admin_total_cases: "เคสทั้งหมด",
+        admin_pending_cases: "รอตรวจสอบ",
+        admin_confirmed: "ยืนยันแล้ว",
+        admin_reviewed: "แพทย์ตรวจสอบ",
+        admin_user_management: "จัดการผู้ใช้",
+        admin_case_management: "จัดการเคส",
+        admin_name: "ชื่อ",
+        admin_email: "อีเมล",
+        admin_role: "บทบาท",
+        admin_actions: "การดำเนินการ",
+        admin_change_role: "เปลี่ยนบทบาท",
+        admin_delete: "ลบ",
+        admin_access_denied: "ไม่มีสิทธิ์เข้าถึง เฉพาะผู้ดูแลระบบเท่านั้น",
+        admin_case_mgmt_desc: "ดูและจัดการประวัติการวิเคราะห์ทั้งหมด",
+        admin_system_info: "ข้อมูลระบบ",
+        // Confidence Bar
+        confidence_score: "คะแนนความมั่นใจ",
+        confidence_confirmed: "✓ AI ยืนยัน",
+        confidence_pending: "⚠ รอแพทย์ตรวจสอบ",
+        // Common
+        loading: "กำลังโหลด...",
+        close: "ปิด",
+        cancel: "ยกเลิก",
+        confirm: "ยืนยัน",
+        delete_confirm: "ยืนยันการลบ",
+        delete_confirm_msg: "คุณแน่ใจหรือไม่ว่าต้องการลบรายการนี้?",
+        guest: "ผู้ใช้งานทั่วไป",
+    },
+    en: {
+        nav_home: "Home",
+        nav_history: "History",
+        nav_doctor: "Doctor",
+        nav_admin: "Admin",
+        nav_login: "Login",
+        nav_logout: "Logout",
+        nav_title: "Bone Fracture Analysis Website",
+        nav_subtitle: "Professional Analysis System",
+        footer_disclaimer_title: "Disclaimer",
+        footer_disclaimer_text: "This system is a preliminary analysis tool only. It cannot replace the diagnosis of a specialist doctor. Please consult an orthopedic doctor for proper examination and treatment.",
+        footer_version: "Bone Fracture Analysis v3 supporting 4 languages",
+        login_welcome: "Welcome Back",
+        login_subtitle: "Sign in to access your medical analysis history",
+        login_demo: "Demo Accounts:",
+        login_email: "Email Address",
+        login_password: "Password",
+        login_submit: "Sign In",
+        login_loading: "Signing In...",
+        login_no_account: "Don't have an account?",
+        login_signup_link: "Sign Up",
+        signup_title: "Create Account",
+        signup_subtitle: "Join our medical analysis platform",
+        signup_name: "Full Name",
+        signup_name_placeholder: "John Doe",
+        signup_email: "Email Address",
+        signup_password: "Password",
+        signup_confirm: "Confirm Password",
+        signup_submit: "Create Account",
+        signup_loading: "Creating Account...",
+        signup_has_account: "Already have an account?",
+        signup_login_link: "Sign In",
+        signup_password_mismatch: "Passwords do not match",
+        signup_password_short: "Password must be at least 6 characters",
+        signup_failed: "Registration failed",
+        history_title: "Analysis History",
+        history_subtitle: "View all your X-ray analysis history",
+        history_filter_all: "All",
+        history_filter_confirmed: "Confirmed",
+        history_filter_pending: "Pending",
+        history_filter_reviewed: "Reviewed",
+        history_loading: "Loading...",
+        history_empty: "No History Yet",
+        history_empty_desc: "Start analyzing X-ray images to build your history",
+        history_start_analysis: "Start Analysis",
+        history_date: "Date",
+        history_diagnosis: "Diagnosis",
+        history_details: "Details",
+        history_user: "User",
+        history_language: "Language",
+        history_doctor_notes: "Doctor Notes",
+        doctor_title: "Doctor Dashboard",
+        doctor_subtitle: "Review and verify low-confidence AI diagnoses",
+        doctor_pending: "Pending Review",
+        doctor_reviewed: "Reviewed",
+        doctor_table_patient: "Patient",
+        doctor_table_diagnosis: "AI Diagnosis",
+        doctor_table_confidence: "Confidence",
+        doctor_table_date: "Date",
+        doctor_table_actions: "Actions",
+        doctor_review: "Review",
+        doctor_delete: "Delete",
+        doctor_ai_diagnosis: "AI Diagnosis",
+        doctor_your_diagnosis: "Your Diagnosis",
+        doctor_confirm_ai: "Confirm AI Diagnosis",
+        doctor_override: "Override Diagnosis",
+        doctor_notes: "Doctor Notes",
+        doctor_notes_placeholder: "Add clinical notes...",
+        doctor_submit: "Submit Review",
+        doctor_submitting: "Submitting...",
+        doctor_no_pending: "No Pending Cases",
+        doctor_no_pending_desc: "All cases have been reviewed",
+        doctor_access_denied: "Access Denied",
+        doctor_access_denied_desc: "This page is for doctors only",
+        admin_title: "Admin Dashboard",
+        admin_subtitle: "Manage users and system data",
+        admin_total_users: "Total Users",
+        admin_total_doctors: "Total Doctors",
+        admin_total_cases: "Total Cases",
+        admin_pending_cases: "Pending Cases",
+        admin_confirmed: "Confirmed",
+        admin_reviewed: "Doctor Reviewed",
+        admin_user_management: "User Management",
+        admin_case_management: "Case Management",
+        admin_name: "Name",
+        admin_email: "Email",
+        admin_role: "Role",
+        admin_actions: "Actions",
+        admin_change_role: "Change Role",
+        admin_delete: "Delete",
+        admin_access_denied: "Access denied. Admin only.",
+        admin_case_mgmt_desc: "View and manage all analysis cases",
+        admin_system_info: "System Information",
+        confidence_score: "Confidence Score",
+        confidence_confirmed: "✓ AI Confirmed",
+        confidence_pending: "⚠ Pending Doctor Review",
+        loading: "Loading...",
+        close: "Close",
+        cancel: "Cancel",
+        confirm: "Confirm",
+        delete_confirm: "Confirm Delete",
+        delete_confirm_msg: "Are you sure you want to delete this item?",
+        guest: "Guest User",
+    },
+    zh: {
+        nav_home: "首页",
+        nav_history: "历史",
+        nav_doctor: "医生",
+        nav_admin: "管理员",
+        nav_login: "登录",
+        nav_logout: "注销",
+        nav_title: "骨折分析系统",
+        nav_subtitle: "专业分析系统",
+        footer_disclaimer_title: "免责声明",
+        footer_disclaimer_text: "本系统仅为初步分析工具，不能替代专科医生的诊断。请咨询骨科医生进行适当的检查和治疗。",
+        footer_version: "骨折分析系统 v3 支持4种语言",
+        login_welcome: "欢迎回来",
+        login_subtitle: "登录以访问您的医疗分析历史",
+        login_demo: "演示账户：",
+        login_email: "电子邮件",
+        login_password: "密码",
+        login_submit: "登录",
+        login_loading: "登录中...",
+        login_no_account: "还没有账户？",
+        login_signup_link: "注册",
+        signup_title: "创建账户",
+        signup_subtitle: "加入我们的医疗分析平台",
+        signup_name: "姓名",
+        signup_name_placeholder: "张三",
+        signup_email: "电子邮件",
+        signup_password: "密码",
+        signup_confirm: "确认密码",
+        signup_submit: "创建账户",
+        signup_loading: "创建中...",
+        signup_has_account: "已有账户？",
+        signup_login_link: "登录",
+        signup_password_mismatch: "密码不匹配",
+        signup_password_short: "密码至少6个字符",
+        signup_failed: "注册失败",
+        history_title: "分析历史",
+        history_subtitle: "查看所有X光分析历史",
+        history_filter_all: "全部",
+        history_filter_confirmed: "已确认",
+        history_filter_pending: "待审核",
+        history_filter_reviewed: "已审核",
+        history_loading: "加载中...",
+        history_empty: "暂无历史",
+        history_empty_desc: "开始分析X光图像以创建历史",
+        history_start_analysis: "开始分析",
+        history_date: "日期",
+        history_diagnosis: "诊断结果",
+        history_details: "详情",
+        history_user: "用户",
+        history_language: "语言",
+        history_doctor_notes: "医生备注",
+        doctor_title: "医生仪表板",
+        doctor_subtitle: "审查和验证低置信度AI诊断",
+        doctor_pending: "待审核",
+        doctor_reviewed: "已审核",
+        doctor_table_patient: "患者",
+        doctor_table_diagnosis: "AI诊断",
+        doctor_table_confidence: "置信度",
+        doctor_table_date: "日期",
+        doctor_table_actions: "操作",
+        doctor_review: "审查",
+        doctor_delete: "删除",
+        doctor_ai_diagnosis: "AI诊断",
+        doctor_your_diagnosis: "您的诊断",
+        doctor_confirm_ai: "确认AI诊断",
+        doctor_override: "覆盖诊断",
+        doctor_notes: "医生备注",
+        doctor_notes_placeholder: "添加临床备注...",
+        doctor_submit: "提交审查",
+        doctor_submitting: "提交中...",
+        doctor_no_pending: "没有待审核病例",
+        doctor_no_pending_desc: "所有病例已审核完毕",
+        doctor_access_denied: "拒绝访问",
+        doctor_access_denied_desc: "此页面仅限医生使用",
+        admin_title: "管理员仪表板",
+        admin_subtitle: "管理用户和系统数据",
+        admin_total_users: "总用户数",
+        admin_total_doctors: "总医生数",
+        admin_total_cases: "总病例数",
+        admin_pending_cases: "待审核",
+        admin_confirmed: "已确认",
+        admin_reviewed: "医生已审核",
+        admin_user_management: "用户管理",
+        admin_case_management: "病例管理",
+        admin_name: "姓名",
+        admin_email: "邮箱",
+        admin_role: "角色",
+        admin_actions: "操作",
+        admin_change_role: "更改角色",
+        admin_delete: "删除",
+        admin_access_denied: "拒绝访问，仅限管理员",
+        admin_case_mgmt_desc: "查看和管理所有分析病例",
+        admin_system_info: "系统信息",
+        confidence_score: "置信度分数",
+        confidence_confirmed: "✓ AI已确认",
+        confidence_pending: "⚠ 待医生审查",
+        loading: "加载中...",
+        close: "关闭",
+        cancel: "取消",
+        confirm: "确认",
+        delete_confirm: "确认删除",
+        delete_confirm_msg: "确定要删除此项吗？",
+        guest: "访客用户",
+    },
+    ja: {
+        nav_home: "ホーム",
+        nav_history: "履歴",
+        nav_doctor: "医師",
+        nav_admin: "管理者",
+        nav_login: "ログイン",
+        nav_logout: "ログアウト",
+        nav_title: "骨折分析システム",
+        nav_subtitle: "プロフェッショナル分析システム",
+        footer_disclaimer_title: "免責事項",
+        footer_disclaimer_text: "本システムは初期分析ツールに過ぎません。専門医の診断の代わりにはなりません。適切な検査と治療のために整形外科医にご相談ください。",
+        footer_version: "骨折分析システム v3 4言語対応",
+        login_welcome: "おかえりなさい",
+        login_subtitle: "医療分析履歴にアクセスするにはログインしてください",
+        login_demo: "デモアカウント：",
+        login_email: "メールアドレス",
+        login_password: "パスワード",
+        login_submit: "ログイン",
+        login_loading: "ログイン中...",
+        login_no_account: "アカウントをお持ちでありませんか？",
+        login_signup_link: "新規登録",
+        signup_title: "アカウント作成",
+        signup_subtitle: "医療分析プラットフォームに参加",
+        signup_name: "氏名",
+        signup_name_placeholder: "山田太郎",
+        signup_email: "メールアドレス",
+        signup_password: "パスワード",
+        signup_confirm: "パスワード確認",
+        signup_submit: "アカウント作成",
+        signup_loading: "作成中...",
+        signup_has_account: "既にアカウントをお持ちですか？",
+        signup_login_link: "ログイン",
+        signup_password_mismatch: "パスワードが一致しません",
+        signup_password_short: "パスワードは6文字以上必要です",
+        signup_failed: "登録に失敗しました",
+        history_title: "分析履歴",
+        history_subtitle: "すべてのX線分析履歴を表示",
+        history_filter_all: "すべて",
+        history_filter_confirmed: "確認済み",
+        history_filter_pending: "保留中",
+        history_filter_reviewed: "レビュー済み",
+        history_loading: "読み込み中...",
+        history_empty: "履歴なし",
+        history_empty_desc: "X線画像の分析を開始して履歴を作成しましょう",
+        history_start_analysis: "分析開始",
+        history_date: "日付",
+        history_diagnosis: "診断結果",
+        history_details: "詳細",
+        history_user: "ユーザー",
+        history_language: "言語",
+        history_doctor_notes: "医師メモ",
+        doctor_title: "医師ダッシュボード",
+        doctor_subtitle: "低信頼度のAI診断を確認・検証",
+        doctor_pending: "確認待ち",
+        doctor_reviewed: "確認済み",
+        doctor_table_patient: "患者",
+        doctor_table_diagnosis: "AI診断",
+        doctor_table_confidence: "信頼度",
+        doctor_table_date: "日付",
+        doctor_table_actions: "アクション",
+        doctor_review: "レビュー",
+        doctor_delete: "削除",
+        doctor_ai_diagnosis: "AI診断",
+        doctor_your_diagnosis: "あなたの診断",
+        doctor_confirm_ai: "AI診断を確認",
+        doctor_override: "診断を変更",
+        doctor_notes: "医師メモ",
+        doctor_notes_placeholder: "臨床メモを追加...",
+        doctor_submit: "レビュー提出",
+        doctor_submitting: "送信中...",
+        doctor_no_pending: "保留中の症例なし",
+        doctor_no_pending_desc: "すべての症例がレビュー済みです",
+        doctor_access_denied: "アクセス拒否",
+        doctor_access_denied_desc: "このページは医師専用です",
+        admin_title: "管理者ダッシュボード",
+        admin_subtitle: "ユーザーとシステムデータを管理",
+        admin_total_users: "総ユーザー数",
+        admin_total_doctors: "総医師数",
+        admin_total_cases: "総症例数",
+        admin_pending_cases: "保留中",
+        admin_confirmed: "確認済み",
+        admin_reviewed: "医師レビュー済み",
+        admin_user_management: "ユーザー管理",
+        admin_case_management: "症例管理",
+        admin_name: "名前",
+        admin_email: "メール",
+        admin_role: "役割",
+        admin_actions: "アクション",
+        admin_change_role: "役割変更",
+        admin_delete: "削除",
+        admin_access_denied: "アクセス拒否。管理者のみ。",
+        admin_case_mgmt_desc: "すべての分析症例を表示および管理",
+        admin_system_info: "システム情報",
+        confidence_score: "信頼度スコア",
+        confidence_confirmed: "✓ AI確認済み",
+        confidence_pending: "⚠ 医師確認待ち",
+        loading: "読み込み中...",
+        close: "閉じる",
+        cancel: "キャンセル",
+        confirm: "確認",
+        delete_confirm: "削除確認",
+        delete_confirm_msg: "この項目を削除してよろしいですか？",
+        guest: "ゲストユーザー",
+    }
+};

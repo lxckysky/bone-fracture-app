@@ -4,6 +4,8 @@ import React, { useEffect, useState } from 'react';
 import { useRouter } from 'next/navigation';
 import { Stethoscope, AlertTriangle, CheckCircle, X, Trash2 } from 'lucide-react';
 import { useAuth } from '@/contexts/auth-context';
+import { useLanguage } from '@/contexts/language-context';
+import { PAGE_TRANSLATIONS } from '@/lib/i18n';
 import { Card, CardBody, CardHeader } from '@/components/ui/card';
 import { Button } from '@/components/ui/button';
 import { Modal } from '@/components/ui/modal';
@@ -17,6 +19,8 @@ import { getFractureLabel, doctorOverrideTypes } from '@/lib/fracture-data';
 export default function DoctorPage() {
     const router = useRouter();
     const { user, isDoctor, isLoading: authLoading } = useAuth();
+    const { language } = useLanguage();
+    const pt = PAGE_TRANSLATIONS[language];
     const [pendingCases, setPendingCases] = useState<AnalysisCase[]>([]);
     const [reviewedCount, setReviewedCount] = useState(0);
     const [selectedCase, setSelectedCase] = useState<AnalysisCase | null>(null);
@@ -189,9 +193,9 @@ export default function DoctorPage() {
             <div>
                 <h1 className="text-4xl font-bold flex items-center gap-3">
                     <Stethoscope className="text-cyan-400" size={40} />
-                    Doctor Dashboard
+                    {pt.doctor_title}
                 </h1>
-                <p className="text-slate-400 mt-2">Review and verify low-confidence AI diagnoses</p>
+                <p className="text-slate-400 mt-2">{pt.doctor_subtitle}</p>
             </div>
 
             {/* Statistics */}
@@ -199,14 +203,14 @@ export default function DoctorPage() {
                 <Card>
                     <CardBody className="text-center">
                         <AlertTriangle className="mx-auto mb-2 text-amber-400" size={32} />
-                        <p className="text-slate-400 text-sm">Pending Review</p>
+                        <p className="text-slate-400 text-sm">{pt.doctor_pending}</p>
                         <p className="text-3xl font-bold text-amber-400">{pendingCases.length}</p>
                     </CardBody>
                 </Card>
                 <Card>
                     <CardBody className="text-center">
                         <CheckCircle className="mx-auto mb-2 text-emerald-400" size={32} />
-                        <p className="text-slate-400 text-sm">Reviewed Today</p>
+                        <p className="text-slate-400 text-sm">{pt.doctor_reviewed}</p>
                         <p className="text-3xl font-bold text-emerald-400">
                             {reviewedCount}
                         </p>
@@ -224,14 +228,14 @@ export default function DoctorPage() {
             {/* Pending Cases Table */}
             <Card>
                 <CardHeader>
-                    <h2 className="text-2xl font-bold">Pending Review Cases</h2>
+                    <h2 className="text-2xl font-bold">{pt.doctor_pending}</h2>
                 </CardHeader>
                 <CardBody>
                     {pendingCases.length === 0 ? (
                         <div className="text-center py-12">
                             <CheckCircle className="mx-auto mb-4 text-emerald-400" size={64} />
-                            <h3 className="text-xl font-semibold text-slate-300">All caught up!</h3>
-                            <p className="text-slate-400 mt-2">No cases pending review at this time</p>
+                            <h3 className="text-xl font-semibold text-slate-300">{pt.doctor_no_pending}</h3>
+                            <p className="text-slate-400 mt-2">{pt.doctor_no_pending_desc}</p>
                         </div>
                     ) : (
                         <>
@@ -263,10 +267,10 @@ export default function DoctorPage() {
                                                 />
                                             </th>
                                             <th className="text-left py-3 px-4 text-slate-400 font-semibold">Image</th>
-                                            <th className="text-left py-3 px-4 text-slate-400 font-semibold">AI Diagnosis</th>
-                                            <th className="text-left py-3 px-4 text-slate-400 font-semibold">Confidence</th>
-                                            <th className="text-left py-3 px-4 text-slate-400 font-semibold">Date</th>
-                                            <th className="text-left py-3 px-4 text-slate-400 font-semibold">Actions</th>
+                                            <th className="text-left py-3 px-4 text-slate-400 font-semibold">{pt.doctor_table_diagnosis}</th>
+                                            <th className="text-left py-3 px-4 text-slate-400 font-semibold">{pt.doctor_table_confidence}</th>
+                                            <th className="text-left py-3 px-4 text-slate-400 font-semibold">{pt.doctor_table_date}</th>
+                                            <th className="text-left py-3 px-4 text-slate-400 font-semibold">{pt.doctor_table_actions}</th>
                                         </tr>
                                     </thead>
                                     <tbody>
@@ -297,7 +301,7 @@ export default function DoctorPage() {
                                                 </td>
                                                 <td className="py-3 px-4">
                                                     <p className="font-semibold text-white">
-                                                        {getFractureLabel(case_.aiDiagnosis, 'en')}
+                                                        {getFractureLabel(case_.aiDiagnosis, language)}
                                                     </p>
                                                 </td>
                                                 <td className="py-3 px-4">
@@ -340,7 +344,7 @@ export default function DoctorPage() {
                     <Modal
                         isOpen={!!selectedCase}
                         onClose={() => setSelectedCase(null)}
-                        title="Case Review"
+                        title={pt.doctor_review}
                         size="xl"
                     >
                         <div className="space-y-6">
@@ -409,14 +413,14 @@ export default function DoctorPage() {
                                     <div className="bg-slate-900/80 p-5 rounded-xl border border-cyan-500/30">
                                         <div className="flex justify-between items-start mb-4">
                                             <div>
-                                                <span className="text-xs font-bold text-cyan-400 uppercase tracking-wider">Vision AI Diagnosis</span>
+                                                <span className="text-xs font-bold text-cyan-400 uppercase tracking-wider">{pt.doctor_ai_diagnosis}</span>
                                                 <h2 className="text-2xl font-bold text-white capitalize">
-                                                    {getFractureLabel(selectedCase.aiDiagnosis, 'en')}
+                                                    {getFractureLabel(selectedCase.aiDiagnosis, language)}
                                                 </h2>
                                             </div>
                                             <div className="text-right">
                                                 <span className="text-2xl font-bold text-cyan-400">{(selectedCase.confidence * 100).toFixed(1)}%</span>
-                                                <span className="block text-xs text-slate-400">Confidence</span>
+                                                <span className="block text-xs text-slate-400">{pt.doctor_table_confidence}</span>
                                             </div>
                                         </div>
 
@@ -467,7 +471,7 @@ export default function DoctorPage() {
                                                     : 'text-slate-400 hover:text-white'
                                                     }`}
                                             >
-                                                Confirm AI
+                                                {pt.doctor_confirm_ai}
                                             </button>
                                             <button
                                                 onClick={() => setConfirmAI(false)}
@@ -476,7 +480,7 @@ export default function DoctorPage() {
                                                     : 'text-slate-400 hover:text-white'
                                                     }`}
                                             >
-                                                Override
+                                                {pt.doctor_override}
                                             </button>
                                         </div>
 
@@ -491,7 +495,7 @@ export default function DoctorPage() {
                                                 >
                                                     {doctorOverrideTypes.map((type) => (
                                                         <option key={type} value={type}>
-                                                            {getFractureLabel(type, 'en')}
+                                                            {getFractureLabel(type, language)}
                                                         </option>
                                                     ))}
                                                 </select>
@@ -500,11 +504,11 @@ export default function DoctorPage() {
 
                                         {/* Notes */}
                                         <div>
-                                            <label className="text-xs text-slate-400 mb-1 block">Clinical Notes (Optional)</label>
+                                            <label className="text-xs text-slate-400 mb-1 block">{pt.doctor_notes}</label>
                                             <textarea
                                                 value={notes}
                                                 onChange={(e) => setNotes(e.target.value)}
-                                                placeholder="Enter your clinical observations..."
+                                                placeholder={pt.doctor_notes_placeholder}
                                                 rows={3}
                                                 className="w-full bg-slate-900 border border-slate-700 rounded-lg p-3 text-white text-sm focus:border-cyan-500 outline-none resize-none"
                                             />
@@ -518,7 +522,7 @@ export default function DoctorPage() {
                                             disabled={submitting}
                                             className="w-full"
                                         >
-                                            {submitting ? 'Processing...' : (confirmAI ? 'Approve & Close Case' : 'Update & Close Case')}
+                                            {submitting ? pt.doctor_submitting : (confirmAI ? pt.doctor_submit : pt.doctor_submit)}
                                         </Button>
                                     </div>
                                 </div>
@@ -618,7 +622,7 @@ export default function DoctorPage() {
                             onClick={(e) => e.stopPropagation()}
                         />
                         <div className="absolute bottom-6 left-1/2 -translate-x-1/2 bg-black/60 px-4 py-2 rounded-full text-white/70 text-sm backdrop-blur-md">
-                            {selectedCase ? `Reviewing Case: ${getFractureLabel(selectedCase.aiDiagnosis, 'en')}` : 'X-Ray Detailed View'}
+                            {selectedCase ? `Reviewing Case: ${getFractureLabel(selectedCase.aiDiagnosis, language)}` : 'X-Ray Detailed View'}
                         </div>
                     </div>
                 )

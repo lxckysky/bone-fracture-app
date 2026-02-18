@@ -5,12 +5,16 @@ import Link from 'next/link';
 import { useRouter } from 'next/navigation';
 import { UserPlus, Mail, Lock, User, AlertCircle } from 'lucide-react';
 import { useAuth } from '@/contexts/auth-context';
+import { useLanguage } from '@/contexts/language-context';
+import { PAGE_TRANSLATIONS } from '@/lib/i18n';
 import { Button } from '@/components/ui/button';
 import { Card, CardBody, CardHeader } from '@/components/ui/card';
 
 export default function SignupPage() {
     const router = useRouter();
-    const { register } = useAuth(); // Changed from signup to register
+    const { register } = useAuth();
+    const { language } = useLanguage();
+    const t = PAGE_TRANSLATIONS[language];
     const [name, setName] = useState('');
     const [email, setEmail] = useState('');
     const [password, setPassword] = useState('');
@@ -18,17 +22,17 @@ export default function SignupPage() {
     const [error, setError] = useState('');
     const [loading, setLoading] = useState(false);
 
-    const handleSubmit = async (e: React.FormEvent) => { // Added async
+    const handleSubmit = async (e: React.FormEvent) => {
         e.preventDefault();
         setError('');
 
         if (password !== confirmPassword) {
-            setError('Passwords do not match');
+            setError(t.signup_password_mismatch);
             return;
         }
 
         if (password.length < 6) {
-            setError('Password must be at least 6 characters');
+            setError(t.signup_password_short);
             return;
         }
 
@@ -36,12 +40,9 @@ export default function SignupPage() {
 
         try {
             await register(email, name, password);
-            // If successful, register sets the user or throws
-            // If API.register works, we usually get logged in or need to verify email
-            // But we disabled email verification, so we should be logged in.
             router.push('/');
         } catch (err: any) {
-            setError(err.message || 'Registration failed');
+            setError(err.message || t.signup_failed);
             setLoading(false);
         }
     };
@@ -55,8 +56,8 @@ export default function SignupPage() {
                             <div className="inline-flex p-4 bg-cyan-500/10 rounded-full mb-4">
                                 <UserPlus className="text-cyan-400" size={40} />
                             </div>
-                            <h1 className="text-3xl font-bold">Create Account</h1>
-                            <p className="text-slate-400">Join our medical analysis platform</p>
+                            <h1 className="text-3xl font-bold">{t.signup_title}</h1>
+                            <p className="text-slate-400">{t.signup_subtitle}</p>
                         </div>
                     </CardHeader>
                     <CardBody>
@@ -69,7 +70,7 @@ export default function SignupPage() {
                             )}
 
                             <div>
-                                <label htmlFor="name">Full Name</label>
+                                <label htmlFor="name">{t.signup_name}</label>
                                 <div className="relative">
                                     <User className="absolute left-3 top-1/2 -translate-y-1/2 text-slate-400" size={20} />
                                     <input
@@ -77,7 +78,7 @@ export default function SignupPage() {
                                         type="text"
                                         value={name}
                                         onChange={(e) => setName(e.target.value)}
-                                        placeholder="John Doe"
+                                        placeholder={t.signup_name_placeholder}
                                         className="pl-10 w-full"
                                         required
                                     />
@@ -85,7 +86,7 @@ export default function SignupPage() {
                             </div>
 
                             <div>
-                                <label htmlFor="email">Email Address</label>
+                                <label htmlFor="email">{t.signup_email}</label>
                                 <div className="relative">
                                     <Mail className="absolute left-3 top-1/2 -translate-y-1/2 text-slate-400" size={20} />
                                     <input
@@ -101,7 +102,7 @@ export default function SignupPage() {
                             </div>
 
                             <div>
-                                <label htmlFor="password">Password</label>
+                                <label htmlFor="password">{t.signup_password}</label>
                                 <div className="relative">
                                     <Lock className="absolute left-3 top-1/2 -translate-y-1/2 text-slate-400" size={20} />
                                     <input
@@ -117,7 +118,7 @@ export default function SignupPage() {
                             </div>
 
                             <div>
-                                <label htmlFor="confirmPassword">Confirm Password</label>
+                                <label htmlFor="confirmPassword">{t.signup_confirm}</label>
                                 <div className="relative">
                                     <Lock className="absolute left-3 top-1/2 -translate-y-1/2 text-slate-400" size={20} />
                                     <input
@@ -133,13 +134,13 @@ export default function SignupPage() {
                             </div>
 
                             <Button type="submit" variant="primary" size="lg" className="w-full" disabled={loading}>
-                                {loading ? 'Creating Account...' : 'Create Account'}
+                                {loading ? t.signup_loading : t.signup_submit}
                             </Button>
 
                             <div className="text-center text-slate-400">
-                                Already have an account?{' '}
+                                {t.signup_has_account}{' '}
                                 <Link href="/login" className="text-cyan-400 hover:text-cyan-300 font-semibold">
-                                    Sign In
+                                    {t.signup_login_link}
                                 </Link>
                             </div>
                         </form>

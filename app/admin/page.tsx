@@ -4,6 +4,8 @@ import React, { useEffect, useState } from 'react';
 import { useRouter } from 'next/navigation';
 import { Shield, Users, TrendingUp, UserCog, Trash2 } from 'lucide-react';
 import { useAuth } from '@/contexts/auth-context';
+import { useLanguage } from '@/contexts/language-context';
+import { PAGE_TRANSLATIONS } from '@/lib/i18n';
 import { Card, CardBody, CardHeader } from '@/components/ui/card';
 import { Button } from '@/components/ui/button';
 import { ConfirmDialog } from '@/components/ui/confirm-dialog';
@@ -14,6 +16,8 @@ import { User, UserRole, AnalysisCase } from '@/types';
 export default function AdminPage() {
     const router = useRouter();
     const { user: currentUser, isAdmin, isLoading: authLoading } = useAuth();
+    const { language } = useLanguage();
+    const pt = PAGE_TRANSLATIONS[language];
     const [users, setUsers] = useState<User[]>([]);
     const [cases, setCases] = useState<AnalysisCase[]>([]);
     const [stats, setStats] = useState({
@@ -171,9 +175,9 @@ export default function AdminPage() {
             <div>
                 <h1 className="text-4xl font-bold flex items-center gap-3">
                     <Shield className="text-cyan-400" size={40} />
-                    Admin Panel
+                    {pt.admin_title}
                 </h1>
-                <p className="text-slate-400 mt-2">Manage users and system roles</p>
+                <p className="text-slate-400 mt-2">{pt.admin_subtitle}</p>
             </div>
 
             {/* Statistics Dashboard */}
@@ -181,28 +185,28 @@ export default function AdminPage() {
                 <Card>
                     <CardBody className="text-center">
                         <Users className="mx-auto mb-2 text-cyan-400" size={32} />
-                        <p className="text-slate-400 text-sm">Total Users</p>
+                        <p className="text-slate-400 text-sm">{pt.admin_total_users}</p>
                         <p className="text-3xl font-bold text-cyan-400">{stats.totalUsers}</p>
                     </CardBody>
                 </Card>
                 <Card>
                     <CardBody className="text-center">
                         <UserCog className="mx-auto mb-2 text-emerald-400" size={32} />
-                        <p className="text-slate-400 text-sm">Doctors</p>
+                        <p className="text-slate-400 text-sm">{pt.admin_total_doctors}</p>
                         <p className="text-3xl font-bold text-emerald-400">{stats.totalDoctors}</p>
                     </CardBody>
                 </Card>
                 <Card>
                     <CardBody className="text-center">
                         <TrendingUp className="mx-auto mb-2 text-blue-400" size={32} />
-                        <p className="text-slate-400 text-sm">Total Cases</p>
+                        <p className="text-slate-400 text-sm">{pt.admin_total_cases}</p>
                         <p className="text-3xl font-bold text-blue-400">{stats.totalCases}</p>
                     </CardBody>
                 </Card>
                 <Card>
                     <CardBody className="text-center">
                         <Shield className="mx-auto mb-2 text-amber-400" size={32} />
-                        <p className="text-slate-400 text-sm">Pending Cases</p>
+                        <p className="text-slate-400 text-sm">{pt.admin_pending_cases}</p>
                         <p className="text-3xl font-bold text-amber-400">{stats.pendingCases}</p>
                     </CardBody>
                 </Card>
@@ -211,17 +215,17 @@ export default function AdminPage() {
             {/* User Management Table */}
             <Card>
                 <CardHeader>
-                    <h2 className="text-2xl font-bold">User Management</h2>
+                    <h2 className="text-2xl font-bold">{pt.admin_user_management}</h2>
                 </CardHeader>
                 <CardBody>
                     <div className="overflow-x-auto">
                         <table className="w-full">
                             <thead>
                                 <tr className="border-b border-slate-700">
-                                    <th className="text-left py-3 px-4 text-slate-400 font-semibold">Name</th>
-                                    <th className="text-left py-3 px-4 text-slate-400 font-semibold">Email</th>
-                                    <th className="text-left py-3 px-4 text-slate-400 font-semibold">Current Role</th>
-                                    <th className="text-left py-3 px-4 text-slate-400 font-semibold">Change Role</th>
+                                    <th className="text-left py-3 px-4 text-slate-400 font-semibold">{pt.admin_name}</th>
+                                    <th className="text-left py-3 px-4 text-slate-400 font-semibold">{pt.admin_email}</th>
+                                    <th className="text-left py-3 px-4 text-slate-400 font-semibold">{pt.admin_role}</th>
+                                    <th className="text-left py-3 px-4 text-slate-400 font-semibold">{pt.admin_change_role}</th>
                                 </tr>
                             </thead>
                             <tbody>
@@ -269,8 +273,8 @@ export default function AdminPage() {
             {/* Case Management */}
             <Card>
                 <CardHeader>
-                    <h2 className="text-2xl font-bold">Case Management</h2>
-                    <p className="text-slate-400 text-sm mt-1">View and manage all analysis cases</p>
+                    <h2 className="text-2xl font-bold">{pt.admin_case_management}</h2>
+                    <p className="text-slate-400 text-sm mt-1">{pt.admin_case_mgmt_desc}</p>
                 </CardHeader>
                 <CardBody>
                     {cases.length === 0 ? (
@@ -338,7 +342,7 @@ export default function AdminPage() {
                                                 </td>
                                                 <td className="py-3 px-4">
                                                     <p className="font-semibold text-white capitalize">
-                                                        {getFractureLabel(case_.aiDiagnosis || case_.fractureType, 'en')}
+                                                        {getFractureLabel(case_.aiDiagnosis || case_.fractureType, language)}
                                                     </p>
                                                 </td>
                                                 <td className="py-3 px-4">
@@ -383,7 +387,7 @@ export default function AdminPage() {
             {/* System Information */}
             <Card>
                 <CardHeader>
-                    <h2 className="text-2xl font-bold">System Information</h2>
+                    <h2 className="text-2xl font-bold">{pt.admin_system_info}</h2>
                 </CardHeader>
                 <CardBody>
                     <div className="grid md:grid-cols-2 gap-4">

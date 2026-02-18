@@ -2,6 +2,7 @@ import type { Metadata } from "next";
 import { Inter } from "next/font/google";
 import "./globals.css";
 import { AuthProvider } from "@/contexts/auth-context";
+import { LanguageProvider } from "@/contexts/language-context";
 import { Navbar } from "@/components/navbar";
 import { Footer } from "@/components/footer";
 
@@ -20,15 +21,17 @@ export default function RootLayout({
   return (
     <html lang="en">
       <body className={inter.className}>
-        <AuthProvider>
-          <div className="flex flex-col min-h-screen">
-            <Navbar />
-            <main className="container mx-auto px-4 py-8 flex-1">
-              {children}
-            </main>
-            <Footer />
-          </div>
-        </AuthProvider>
+        <LanguageProvider>
+          <AuthProvider>
+            <div className="flex flex-col min-h-screen">
+              <Navbar />
+              <main className="container mx-auto px-4 py-8 flex-1">
+                {children}
+              </main>
+              <Footer />
+            </div>
+          </AuthProvider>
+        </LanguageProvider>
       </body>
     </html>
   );

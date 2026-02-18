@@ -5,12 +5,16 @@ import Link from 'next/link';
 import { useRouter } from 'next/navigation';
 import { LogIn, Mail, Lock, AlertCircle } from 'lucide-react';
 import { useAuth } from '@/contexts/auth-context';
+import { useLanguage } from '@/contexts/language-context';
+import { PAGE_TRANSLATIONS } from '@/lib/i18n';
 import { Button } from '@/components/ui/button';
 import { Card, CardBody, CardHeader } from '@/components/ui/card';
 
 export default function LoginPage() {
     const router = useRouter();
     const { login } = useAuth();
+    const { language } = useLanguage();
+    const t = PAGE_TRANSLATIONS[language];
     const [email, setEmail] = useState('');
     const [password, setPassword] = useState('');
     const [error, setError] = useState('');
@@ -40,20 +44,20 @@ export default function LoginPage() {
                             <div className="inline-flex p-4 bg-cyan-500/10 rounded-full mb-4">
                                 <LogIn className="text-cyan-400" size={40} />
                             </div>
-                            <h1 className="text-3xl font-bold">Welcome Back</h1>
-                            <p className="text-slate-400">Sign in to access your medical analysis history</p>
+                            <h1 className="text-3xl font-bold">{t.login_welcome}</h1>
+                            <p className="text-slate-400">{t.login_subtitle}</p>
                         </div>
                     </CardHeader>
                     <CardBody>
                         <form onSubmit={handleSubmit} className="space-y-6">
                             {/* Demo Credentials Info */}
                             <div className="bg-cyan-500/10 border border-cyan-500/30 rounded-lg p-4 text-sm">
-                                <p className="font-semibold text-cyan-400 mb-2">Demo Accounts:</p>
+                                <p className="font-semibold text-cyan-400 mb-2">{t.login_demo}</p>
                                 <div className="space-y-1 text-slate-300">
                                     <p>• User: user@test.com</p>
                                     <p>• Doctor: doctor@test.com</p>
                                     <p>• Admin: admin@test.com</p>
-                                    <p className="text-slate-400 mt-2">Password for all: <strong>demo123</strong></p>
+                                    <p className="text-slate-400 mt-2">Password: <strong>demo123</strong></p>
                                 </div>
                             </div>
 
@@ -65,7 +69,7 @@ export default function LoginPage() {
                             )}
 
                             <div>
-                                <label htmlFor="email">Email Address</label>
+                                <label htmlFor="email">{t.login_email}</label>
                                 <div className="relative">
                                     <Mail className="absolute left-3 top-1/2 -translate-y-1/2 text-slate-400" size={20} />
                                     <input
@@ -81,7 +85,7 @@ export default function LoginPage() {
                             </div>
 
                             <div>
-                                <label htmlFor="password">Password</label>
+                                <label htmlFor="password">{t.login_password}</label>
                                 <div className="relative">
                                     <Lock className="absolute left-3 top-1/2 -translate-y-1/2 text-slate-400" size={20} />
                                     <input
@@ -97,13 +101,13 @@ export default function LoginPage() {
                             </div>
 
                             <Button type="submit" variant="primary" size="lg" className="w-full" disabled={loading}>
-                                {loading ? 'Signing In...' : 'Sign In'}
+                                {loading ? t.login_loading : t.login_submit}
                             </Button>
 
                             <div className="text-center text-slate-400">
-                                Don&apos;t have an account?{' '}
+                                {t.login_no_account}{' '}
                                 <Link href="/signup" className="text-cyan-400 hover:text-cyan-300 font-semibold">
-                                    Sign Up
+                                    {t.login_signup_link}
                                 </Link>
                             </div>
                         </form>

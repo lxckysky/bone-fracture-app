@@ -4,6 +4,8 @@ import React, { useEffect, useState } from 'react';
 import { useRouter } from 'next/navigation';
 import { History as HistoryIcon, Calendar, TrendingUp, Filter } from 'lucide-react';
 import { useAuth } from '@/contexts/auth-context';
+import { useLanguage } from '@/contexts/language-context';
+import { PAGE_TRANSLATIONS } from '@/lib/i18n';
 import { Card, CardBody, CardHeader } from '@/components/ui/card';
 import { ConfidenceBar } from '@/components/confidence-bar';
 import { API } from '@/lib/api';
@@ -16,6 +18,8 @@ import { getGuestId, isGuestId, getDisplayName } from '@/lib/guest-storage';
 export default function HistoryPage() {
     const router = useRouter();
     const { user, isAuthenticated, isLoading: authLoading, isDoctor, isAdmin } = useAuth();
+    const { language } = useLanguage();
+    const pt = PAGE_TRANSLATIONS[language];
     const [cases, setCases] = useState<AnalysisCase[]>([]);
     const [loading, setLoading] = useState(true);
     const [filter, setFilter] = useState<'all' | 'confirmed' | 'pending' | 'reviewed'>('all');
@@ -72,9 +76,9 @@ export default function HistoryPage() {
             doctor_confirmed: 'bg-cyan-500/20 text-cyan-400 border-cyan-500/30',
         };
         const labels = {
-            ai_confirmed: 'Pending Review', // Rename AI Confirmed to Pending Review to reduce redundancy
-            pending_review: 'Pending Review',
-            doctor_confirmed: 'Doctor Verified',
+            ai_confirmed: pt.history_filter_pending,
+            pending_review: pt.history_filter_pending,
+            doctor_confirmed: pt.history_filter_reviewed,
         };
         return (
             <span className={`px-3 py-1 rounded-full text-xs font-semibold border ${badges[status as keyof typeof badges]}`}>
@@ -98,10 +102,10 @@ export default function HistoryPage() {
                 <div>
                     <h1 className="text-4xl font-bold flex items-center gap-3">
                         <HistoryIcon className="text-cyan-400" size={40} />
-                        Case History
+                        {pt.history_title}
                     </h1>
                     <p className="text-slate-400 mt-2">
-                        {isDoctor || isAdmin ? 'View all analysis cases from all users' : 'View your past analysis results'}
+                        {pt.history_subtitle}
                     </p>
                 </div>
             </div>
@@ -110,13 +114,13 @@ export default function HistoryPage() {
             <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
                 <Card>
                     <CardBody className="text-center">
-                        <p className="text-slate-400 text-sm">Total Scans</p>
+                        <p className="text-slate-400 text-sm">{pt.admin_total_cases}</p>
                         <p className="text-3xl font-bold text-cyan-400">{cases.length}</p>
                     </CardBody>
                 </Card>
                 <Card>
                     <CardBody className="text-center">
-                        <p className="text-slate-400 text-sm">Pending Review</p>
+                        <p className="text-slate-400 text-sm">{pt.history_filter_pending}</p>
                         <p className="text-3xl font-bold text-amber-400">
                             {cases.filter((c) => c.status === 'pending_review' || c.status === 'ai_confirmed').length}
                         </p>
@@ -124,7 +128,7 @@ export default function HistoryPage() {
                 </Card>
                 <Card>
                     <CardBody className="text-center">
-                        <p className="text-slate-400 text-sm">Doctor Verified</p>
+                        <p className="text-slate-400 text-sm">{pt.history_filter_reviewed}</p>
                         <p className="text-3xl font-bold text-cyan-400">
                             {cases.filter((c) => c.status === 'doctor_confirmed').length}
                         </p>
@@ -138,18 +142,21 @@ export default function HistoryPage() {
                     <Filter className="text-cyan-400" size={20} />
                     <span className="font-semibold text-slate-300">Filter:</span>
                     <div className="flex gap-2">
-                        {['all', 'pending', 'reviewed'].map((f) => (
-                            <button
-                                key={f}
-                                onClick={() => setFilter(f as any)}
-                                className={`px-4 py-2 rounded-lg font-semibold transition-all capitalize ${filter === f
-                                    ? 'bg-cyan-600 text-white'
-                                    : 'bg-slate-700 text-slate-300 hover:bg-slate-600'
-                                    }`}
-                            >
-                                {f === 'reviewed' ? 'Verified' : f}
-                            </button>
-                        ))}
+                        {(['all', 'pending', 'reviewed'] as const).map((f) => {
+                            const filterLabels = { all: pt.history_filter_all, pending: pt.history_filter_pending, reviewed: pt.history_filter_reviewed };
+                            return (
+                                <button
+                                    key={f}
+                                    onClick={() => setFilter(f as any)}
+                                    className={`px-4 py-2 rounded-lg font-semibold transition-all ${filter === f
+                                        ? 'bg-cyan-600 text-white'
+                                        : 'bg-slate-700 text-slate-300 hover:bg-slate-600'
+                                        }`}
+                                >
+                                    {filterLabels[f]}
+                                </button>
+                            );
+                        })}
                     </div>
                 </CardBody>
             </Card>
@@ -159,8 +166,8 @@ export default function HistoryPage() {
                 <Card>
                     <CardBody className="text-center py-12">
                         <HistoryIcon className="mx-auto mb-4 text-slate-600" size={64} />
-                        <h3 className="text-xl font-semibold text-slate-400">No analysis records found</h3>
-                        <p className="text-slate-500 mt-2">Upload an X-ray image to get started</p>
+                        <h3 className="text-xl font-semibold text-slate-400">{pt.history_empty}</h3>
+                        <p className="text-slate-500 mt-2">{pt.history_empty_desc}</p>
                     </CardBody>
                 </Card>
             ) : (
@@ -177,7 +184,7 @@ export default function HistoryPage() {
                             <CardBody className="space-y-3">
                                 <div>
                                     <h3 className="font-bold text-lg text-cyan-400">
-                                        {getFractureLabel(case_.fractureType, case_.language)}
+                                        {getFractureLabel(case_.fractureType, language)}
                                     </h3>
                                     {(isDoctor || isAdmin) && (
                                         <p className="text-xs text-slate-400 mt-1 flex items-center gap-1">
@@ -211,48 +218,48 @@ export default function HistoryPage() {
                 <Modal
                     isOpen={!!selectedCase}
                     onClose={() => setSelectedCase(null)}
-                    title="Analysis Details"
+                    title={pt.history_details}
                     size="xl"
                 >
                     <div className="grid md:grid-cols-2 gap-6">
                         <div>
-                            <h4 className="font-semibold text-lg mb-3">X-Ray Image</h4>
+                            <h4 className="font-semibold text-lg mb-3">X-Ray</h4>
                             <ImageViewer imageUrl={selectedCase.imageData || selectedCase.imageUrl} />
                         </div>
 
                         <div className="space-y-6">
                             <div>
-                                <h4 className="font-semibold text-lg mb-3">Diagnosis</h4>
+                                <h4 className="font-semibold text-lg mb-3">{pt.history_diagnosis}</h4>
                                 <p className="text-2xl font-bold text-cyan-400">
-                                    {getFractureLabel(selectedCase.fractureType, selectedCase.language)}
+                                    {getFractureLabel(selectedCase.fractureType, language)}
                                 </p>
                             </div>
 
                             <ConfidenceBar confidence={selectedCase.confidence * 100} />
 
                             <div className="space-y-3">
-                                <h4 className="font-semibold text-lg">Details</h4>
+                                <h4 className="font-semibold text-lg">{pt.history_details}</h4>
                                 <div className="bg-slate-900/50 rounded-lg p-4 space-y-2 text-sm">
                                     <div className="flex justify-between">
                                         <span className="text-slate-400">Status:</span>
                                         {getStatusBadge(selectedCase.status)}
                                     </div>
                                     <div className="flex justify-between">
-                                        <span className="text-slate-400">AI Diagnosis:</span>
+                                        <span className="text-slate-400">{pt.doctor_ai_diagnosis}:</span>
                                         <span className="text-white font-semibold">
-                                            {getFractureLabel(selectedCase.aiDiagnosis, selectedCase.language)}
+                                            {getFractureLabel(selectedCase.aiDiagnosis, language)}
                                         </span>
                                     </div>
                                     {selectedCase.doctorDiagnosis && (
                                         <div className="flex justify-between">
-                                            <span className="text-slate-400">Doctor Diagnosis:</span>
+                                            <span className="text-slate-400">{pt.doctor_your_diagnosis}:</span>
                                             <span className="text-white font-semibold">
-                                                {getFractureLabel(selectedCase.doctorDiagnosis, selectedCase.language)}
+                                                {getFractureLabel(selectedCase.doctorDiagnosis, language)}
                                             </span>
                                         </div>
                                     )}
                                     <div className="flex justify-between">
-                                        <span className="text-slate-400">Date:</span>
+                                        <span className="text-slate-400">{pt.history_date}:</span>
                                         <span className="text-white">
                                             {new Date(selectedCase.createdAt).toLocaleString()}
                                         </span>
@@ -270,7 +277,7 @@ export default function HistoryPage() {
 
                             {selectedCase.doctorNotes && (
                                 <div>
-                                    <h4 className="font-semibold text-lg mb-2">Doctor&apos;s Notes</h4>
+                                    <h4 className="font-semibold text-lg mb-2">{pt.history_doctor_notes}</h4>
                                     <div className="bg-slate-900/50 rounded-lg p-4">
                                         <p className="text-slate-300">{selectedCase.doctorNotes}</p>
                                     </div>

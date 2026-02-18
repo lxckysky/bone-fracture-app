@@ -1,8 +1,13 @@
 'use client';
 
 import React from 'react';
+import { useLanguage } from '@/contexts/language-context';
+import { PAGE_TRANSLATIONS } from '@/lib/i18n';
 
 export function Footer() {
+    const { language } = useLanguage();
+    const t = PAGE_TRANSLATIONS[language];
+
     return (
         <footer className="mt-auto border-t border-slate-800 bg-slate-900/80 backdrop-blur-sm">
             <div className="container mx-auto px-4 py-8">
@@ -14,12 +19,10 @@ export function Footer() {
                             <path d="M12 9v4" />
                             <path d="M12 17h.01" />
                         </svg>
-                        ข้อจำกัดความรับผิดชอบ
+                        {t.footer_disclaimer_title}
                     </h3>
                     <p className="text-slate-300 text-sm leading-relaxed">
-                        ระบบนี้เป็นเครื่องมือช่วยในการวิเคราะห์เบื้องต้นเท่านั้น
-                        ไม่สามารถใช้แทนการวินิจฉัยของแพทย์ผู้เชี่ยวชาญได้
-                        กรุณาปรึกษาแพทย์ออร์โธปิดิกส์เพื่อการตรวจสอบและรักษาที่เหมาะสม
+                        {t.footer_disclaimer_text}
                     </p>
                 </div>
 
@@ -36,7 +39,7 @@ export function Footer() {
                             <span className="font-semibold text-cyan-400">YOLO11x-cls</span>
                         </p>
                         <p className="mt-1 text-xs text-slate-500">
-                            ระบบวิเคราะห์กระดูกหัก v3 รองรับ 4 ภาษา
+                            {t.footer_version}
                         </p>
                     </div>
 

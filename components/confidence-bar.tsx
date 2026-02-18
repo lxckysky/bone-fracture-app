@@ -1,6 +1,8 @@
 'use client';
 
 import React from 'react';
+import { useLanguage } from '@/contexts/language-context';
+import { PAGE_TRANSLATIONS } from '@/lib/i18n';
 
 interface ConfidenceBarProps {
     confidence: number;
@@ -8,6 +10,8 @@ interface ConfidenceBarProps {
 }
 
 export function ConfidenceBar({ confidence, className = '' }: ConfidenceBarProps) {
+    const { language } = useLanguage();
+    const t = PAGE_TRANSLATIONS[language];
     const isHighConfidence = confidence >= 70;
 
     const barColor = isHighConfidence
@@ -16,18 +20,18 @@ export function ConfidenceBar({ confidence, className = '' }: ConfidenceBarProps
 
     const statusBadge = isHighConfidence ? (
         <span className="inline-flex items-center px-3 py-1 rounded-full text-sm font-semibold bg-emerald-500/20 text-emerald-400 border border-emerald-500/30">
-            ✓ AI Confirmed
+            {t.confidence_confirmed}
         </span>
     ) : (
         <span className="inline-flex items-center px-3 py-1 rounded-full text-sm font-semibold bg-amber-500/20 text-amber-400 border border-amber-500/30">
-            ⚠ Pending Doctor Review
+            {t.confidence_pending}
         </span>
     );
 
     return (
         <div className={`space-y-3 ${className}`}>
             <div className="flex items-center justify-between">
-                <span className="text-slate-300 font-semibold">Confidence Score</span>
+                <span className="text-slate-300 font-semibold">{t.confidence_score}</span>
                 <span className="text-2xl font-bold text-white">{confidence.toFixed(1)}%</span>
             </div>
 
