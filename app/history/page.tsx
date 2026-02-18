@@ -197,7 +197,7 @@ export default function HistoryPage() {
                                 </div>
 
                                 <div className="flex items-center justify-between">
-                                    <span className="text-slate-300 font-semibold">{case_.confidence.toFixed(1)}%</span>
+                                    <span className="text-slate-300 font-semibold">{(case_.confidence * 100).toFixed(1)}%</span>
                                     {getStatusBadge(case_.status)}
                                 </div>
                             </CardBody>
@@ -228,7 +228,7 @@ export default function HistoryPage() {
                                 </p>
                             </div>
 
-                            <ConfidenceBar confidence={selectedCase.confidence} />
+                            <ConfidenceBar confidence={selectedCase.confidence * 100} />
 
                             <div className="space-y-3">
                                 <h4 className="font-semibold text-lg">Details</h4>

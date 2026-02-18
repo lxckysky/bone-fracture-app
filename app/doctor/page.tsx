@@ -301,7 +301,7 @@ export default function DoctorPage() {
                                                     </p>
                                                 </td>
                                                 <td className="py-3 px-4">
-                                                    <span className="text-amber-400 font-bold">{case_.confidence.toFixed(1)}%</span>
+                                                    <span className="text-amber-400 font-bold">{(case_.confidence * 100).toFixed(1)}%</span>
                                                 </td>
                                                 <td className="py-3 px-4 text-slate-300">
                                                     {new Date(case_.createdAt).toLocaleDateString()}
